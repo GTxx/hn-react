@@ -5,7 +5,7 @@ var TopStory = React.createClass({
       dateType: 'json',
       cache: false,
       success: function(data){
-        this.setState({storyList: data.slice(0, 10)});
+        this.setState({storyList: data.slice(0,10)});
       }.bind(this),
       error: function(xhr, status, err){
         console.error(this.props.url, status, err.toString());
@@ -13,7 +13,7 @@ var TopStory = React.createClass({
     })
   },
   getInitialState: function(){
-    return {storyList: []}
+    return {storyList: [], currentPage: 0}
   },
   componentDidMount: function(){
     this.loadTopStoryFromServer();
@@ -60,14 +60,27 @@ var News = React.createClass({
     this.loadStoryFromServer();
   },
   render: function(){
+    var _tmp = document.createElement('a');
+    _tmp.href = this.state.data.url;
+    var domain = _tmp.hostname;
     return (
       <div className="news">
-        <span>{this.state.data.title}</span>
-        <p>{this.state.data.score}</p>
-        <p>{moment.unix(this.state.data.time).format('lll')}</p>
-        <p>{this.state.data.by}</p>
+        <div>
+          <h4><a href={this.state.data.url}>{this.state.data.title}</a></h4>
+          <p>({domain})</p>
+        </div>
+
+        <p>{this.state.data.score} points by {this.state.data.by} in {moment.unix(this.state.data.time).fromNow()} | {this.state.data.descendants} comments</p>
       </div>
     )
+  }
+});
+
+var NewsPage = React.createClass({
+  render: function(){
+    <div className="newsPage">
+
+    </div>
   }
 });
 

@@ -5,7 +5,10 @@ var TopStory = React.createClass({
       dateType: 'json',
       cache: false,
       success: function(data){
-        this.setState({storyList: data.slice(0,10)});
+        this.setState({
+          storyList: data,
+          current_page: 1
+        });
       }.bind(this),
       error: function(xhr, status, err){
         console.error(this.props.url, status, err.toString());
@@ -19,9 +22,12 @@ var TopStory = React.createClass({
     this.loadTopStoryFromServer();
   },
   render: function(){
+    var page = this.state.current_page;
+    var story_in_current_page = this.state.storyList.slice((page-1)*10, page*10)
     return (
       <div className="newsList">
-        <NewsList data={this.state.storyList} />
+        <NewsList data={story_in_current_page} />
+        <Paginator storyList={this.state.storyList} />
       </div>
     )
   }
@@ -64,14 +70,33 @@ var News = React.createClass({
     _tmp.href = this.state.data.url;
     var domain = _tmp.hostname;
     return (
-      <div className="news">
-        <div>
-          <h4><a href={this.state.data.url}>{this.state.data.title}</a></h4>
-          <p>({domain})</p>
-        </div>
+      <ReactBootstrap.Panel header={<h4><a href={this.state.data.url}>{this.state.data.title}</a> ({domain})</h4>}>
+        <ReactBootstrap.Badge>{this.state.data.score}</ReactBootstrap.Badge> points by {this.state.data.by} in {moment.unix(this.state.data.time).fromNow()} | <ReactBootstrap.Badge>{this.state.data.descendants}</ReactBootstrap.Badge> comments
+      </ReactBootstrap.Panel>
+    )
+  }
+});
 
-        <p>{this.state.data.score} points by {this.state.data.by} in {moment.unix(this.state.data.time).fromNow()} | {this.state.data.descendants} comments</p>
-      </div>
+var Paginator = React.createClass({
+  getInitialState: function(){
+    return {currentPage: 1}
+  },
+  handleSelect: function(event, selectedEvent){
+    this.setState({currentPage: selectedEvent.eventKey});
+  },
+  render: function(){
+    return (
+      <ReactBootstrap.Pagination
+        prev={true}
+        next={true}
+        first={true}
+        last={true}
+        ellipsis={true}
+        items={this.props.storyList.length}
+        maxButtons={10}
+        activePage={this.state.currentPage}
+        onSelect={this.handleSelect}
+        />
     )
   }
 });

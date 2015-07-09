@@ -1,28 +1,21 @@
-var TopStory = React.createClass({
-  loadTopStoryFromServer: function(){
-    $.ajax({
-      url: this.props.url,
-      dateType: 'json',
-      cache: false,
-      success: function(data){
-        this.setState({
-          storyList: data,
-          current_page: 1
-        });
-      }.bind(this),
-      error: function(xhr, status, err){
-        console.error(this.props.url, status, err.toString());
-      }
-    })
-  },
+let TopStory = React.createClass({
   getInitialState: function(){
     return {storyList: [], currentPage: 0}
   },
   componentDidMount: function(){
-    this.loadTopStoryFromServer();
+    $.get(this.props.url)
+      .done(function(data){
+        this.setState({
+          storyList: data,
+          currentPage: 1
+        });
+      }.bind(this))
+      .fail(function(xhr, status, err){
+        console.error(this.props.url, status, err.toString());
+      })
   },
   render: function(){
-    var page = this.state.current_page;
+    let page = this.state.currentPage;
     var story_in_current_page = this.state.storyList.slice((page-1)*10, page*10)
     return (
       <div className="newsList">
@@ -46,24 +39,17 @@ var NewsList = React.createClass({
 });
 
 var News = React.createClass({
-  loadStoryFromServer: function(){
-    $.ajax({
-      url: 'https://hacker-news.firebaseio.com/v0/item/' + this.props.storyId + '.json',
-      dateType: 'json',
-      cache: false,
-      success: function(data){
-        this.setState({data: data})
-      }.bind(this),
-      error: function(xhr, status, err){
-        console.error(this.props.storyId, status, err.toString());
-      }
-    })
-  },
   getInitialState: function(){
     return {data: {}};
   },
   componentDidMount: function(){
-    this.loadStoryFromServer();
+    $.get('https://hacker-news.firebaseio.com/v0/item/' + this.props.storyId + '.json')
+    .done(function(data){
+        this.setState({data: data})
+      }.bind(this))
+    .fail(function(xhr, status, err){
+      console.error(this.props.storyId, status, err.toString());
+    })
   },
   render: function(){
     var _tmp = document.createElement('a');
@@ -109,7 +95,38 @@ var NewsPage = React.createClass({
   }
 });
 
-React.render(
-  <TopStory url="https://hacker-news.firebaseio.com/v0/topstories.json" />,
-  $('#content')[0]
+var News = React.createClass({
+  render: function(){
+    return (
+      <TopStory url="https://hacker-news.firebaseio.com/v0/topstories.json" />
+    )
+  }
+});
+
+var App = React.createClass({
+  render: function(){
+    return (
+      <div>
+        <ReactRouter.RouteHandler />
+      </div>
+    )
+  }
+});
+
+let Comment = React.createClass({
+  render: function(){
+    return (<div>comment to be done</div>)
+  }
+});
+
+let routers = (
+  <ReactRouter.Route handler={App}>
+    <ReactRouter.Route path='news' handler={News}/>
+    <ReactRouter.Route path='comments' handler={Comment}/>
+  </ReactRouter.Route>
 );
+
+
+ReactRouter.run(routers, ReactRouter.HashLocation, (root) => {
+  React.render(<root />, document.getElementById('content'));
+});

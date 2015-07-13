@@ -3,8 +3,9 @@ let TopStory = React.createClass({
     return {storyList: [], currentPage: 0}
   },
   componentDidMount: function(){
-    $.get(this.props.url)
+    $.get("https://hacker-news.firebaseio.com/v0/topstories.json")
       .done(function(data){
+        console.log(data);
         this.setState({
           storyList: data,
           currentPage: 1
@@ -19,18 +20,17 @@ let TopStory = React.createClass({
     var story_in_current_page = this.state.storyList.slice((page-1)*10, page*10)
     return (
       <div className="newsList">
-        <NewsList data={story_in_current_page} />
+        <ItemList data={story_in_current_page} />
         <Paginator storyList={this.state.storyList} />
       </div>
     )
   }
 });
 
-var NewsList = React.createClass({
-
+var ItemList = React.createClass({
   render: function(){
-    var storyNodes = this.props.data.map(function(storyId, index){
-      return (<News storyId={storyId} key={index} />)
+    var storyNodes = this.props.data.map(function(itemId, index){
+      return (<Item itemId={itemId} key={index} />)
     });
     return (
       <div className="newsNodes">{storyNodes}</div>
@@ -38,17 +38,17 @@ var NewsList = React.createClass({
   }
 });
 
-var News = React.createClass({
+var Item = React.createClass({
   getInitialState: function(){
     return {data: {}};
   },
   componentDidMount: function(){
-    $.get('https://hacker-news.firebaseio.com/v0/item/' + this.props.storyId + '.json')
+    $.get('https://hacker-news.firebaseio.com/v0/item/' + this.props.itemId + '.json')
     .done(function(data){
         this.setState({data: data})
       }.bind(this))
     .fail(function(xhr, status, err){
-      console.error(this.props.storyId, status, err.toString());
+      console.error(this.props.itemId, status, err.toString());
     })
   },
   render: function(){
@@ -56,7 +56,7 @@ var News = React.createClass({
     _tmp.href = this.state.data.url;
     var domain = _tmp.hostname;
     return (
-      <ReactBootstrap.Panel header={<h4><a href={this.state.data.url}>{this.state.data.title}</a> ({domain})</h4>}>
+      <ReactBootstrap.Panel header={<h4><a href={this.state.data.url}>{this.state.data.title}</a> ({domain}) | {this.state.data.type}</h4>}>
         <ReactBootstrap.Badge>{this.state.data.score}</ReactBootstrap.Badge> points by {this.state.data.by} in {moment.unix(this.state.data.time).fromNow()} | <ReactBootstrap.Badge>{this.state.data.descendants}</ReactBootstrap.Badge> comments
       </ReactBootstrap.Panel>
     )
@@ -95,23 +95,6 @@ var NewsPage = React.createClass({
   }
 });
 
-var News = React.createClass({
-  render: function(){
-    return (
-      <TopStory url="https://hacker-news.firebaseio.com/v0/topstories.json" />
-    )
-  }
-});
-
-var App = React.createClass({
-  render: function(){
-    return (
-      <div>
-        <ReactRouter.RouteHandler />
-      </div>
-    )
-  }
-});
 
 let Comment = React.createClass({
   render: function(){
@@ -119,14 +102,144 @@ let Comment = React.createClass({
   }
 });
 
-let routers = (
+let Header = React.createClass({
+  render: function(){
+    return (
+      <div>
+        <ul >
+          <li><ReactRouter.Link to='topstory' >Hacker News</ReactRouter.Link></li>
+          <li><ReactRouter.Link to='newstory' >new</ReactRouter.Link></li>
+          <li><ReactRouter.Link to='show' >show</ReactRouter.Link></li>
+          <li><ReactRouter.Link to='ask' >ask</ReactRouter.Link></li>
+          <li><ReactRouter.Link to='jobs' >jobs</ReactRouter.Link></li>
+        </ul>
+      </div>
+    )
+  }
+})
+
+var App = React.createClass({
+  render: function(){
+    return (
+      <div>
+        <h1>App</h1>
+        <Header />
+        <ReactRouter.RouteHandler />
+      </div>
+    )
+  }
+});
+
+let NewStory = React.createClass({
+  getInitialState: function(){
+    return {storyList: [], currentPage: 0}
+  },
+  componentDidMount: function(){
+    $.get('https://hacker-news.firebaseio.com/v0/newstories.json')
+      .done(function(data){
+        this.setState({storyList: data, currentPage: 1});
+      }.bind(this))
+      .fail(function(xhr, status, err){
+        console.error(this.props.url, status, err.toString());
+      })
+  },
+  render: function(){
+    let page = this.state.currentPage;
+    let story_in_current_page = this.state.storyList.slice((page-1)*10, page*10);
+    return (
+      <div className='newsList'>
+        <ItemList data={story_in_current_page} />
+        <Paginator storyList={this.state.storyList} />
+      </div>
+    )
+  }
+});
+
+let Show = React.createClass({
+  getInitialState: function(){
+    return {storyList: [], currentPage: 0}
+  },
+  componentDidMount: function(){
+    $.get(' https://hacker-news.firebaseio.com/v0/showstories.json')
+      .done(function(data){
+        this.setState({storyList: data, currentPage: 1});
+      }.bind(this))
+      .fail(function(xhr, status, err){
+        console.error(this.props.url, status, err.toString());
+      })
+  },
+  render: function(){
+    let page = this.state.currentPage;
+    let story_in_current_page = this.state.storyList.slice((page-1)*10, page*10);
+    return (
+      <div className='newsList'>
+        <ItemList data={story_in_current_page} />
+        <Paginator storyList={this.state.storyList} />
+      </div>
+    )
+  }
+});
+
+let Ask = React.createClass({
+  getInitialState: function(){
+    return {storyList: [], currentPage: 0}
+  },
+  componentDidMount: function(){
+    $.get('https://hacker-news.firebaseio.com/v0/askstories.json')
+      .done(function(data){
+        this.setState({storyList: data, currentPage: 1});
+      }.bind(this))
+      .fail(function(xhr, status, err){
+        console.error(this.props.url, status, err.toString());
+      })
+  },
+  render: function(){
+    let page = this.state.currentPage;
+    let story_in_current_page = this.state.storyList.slice((page-1)*10, page*10);
+    return (
+      <div className='newsList'>
+        <ItemList data={story_in_current_page} />
+        <Paginator storyList={this.state.storyList} />
+      </div>
+    )
+  }
+});
+
+let Jobs = React.createClass({
+  getInitialState: function(){
+    return {storyList: [], currentPage: 0}
+  },
+  componentDidMount: function(){
+    $.get('https://hacker-news.firebaseio.com/v0/jobstories.json')
+      .done(function(data){
+        this.setState({storyList: data, currentPage: 1});
+      }.bind(this))
+      .fail(function(xhr, status, err){
+        console.error(this.props.url, status, err.toString());
+      })
+  },
+  render: function(){
+    let page = this.state.currentPage;
+    let story_in_current_page = this.state.storyList.slice((page-1)*10, page*10);
+    return (
+      <div className='newsList'>
+        <ItemList data={story_in_current_page} />
+        <Paginator storyList={this.state.storyList} />
+      </div>
+    )
+  }
+});
+
+var routers = (
   <ReactRouter.Route handler={App}>
-    <ReactRouter.Route path='news' handler={News}/>
-    <ReactRouter.Route path='comments' handler={Comment}/>
+    <ReactRouter.Route path='/' name='topstory' handler={TopStory} />
+    <ReactRouter.Route path='/newstory' name='newstory' handler={NewStory} />
+    <ReactRouter.Route path='/show' name='show' handler={Show} />
+    <ReactRouter.Route path='/ask' name='ask' handler={Ask} />
+    <ReactRouter.Route path='/jobs' name='jobs' handler={Jobs} />
   </ReactRouter.Route>
 );
 
-
-ReactRouter.run(routers, ReactRouter.HashLocation, (root) => {
-  React.render(<root />, document.getElementById('content'));
+ReactRouter.run(routers, ReactRouter.HashLocation, (Root) => {
+  React.render(<Root />, document.getElementById('content'));
 });

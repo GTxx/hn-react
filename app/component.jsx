@@ -2,7 +2,7 @@ var React = require('react');
 var $ = require('jquery');
 var ReactBootstrap = require('react-bootstrap');
 var moment = require('moment');
-//require('bootstrap.css');
+require('bootstrap/dist/css/bootstrap.css');
 
 class TopStory extends React.Component{
   constructor(props){

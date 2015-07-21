@@ -12,7 +12,9 @@ module.exports = {
       loader: 'babel'
     }, {
       test: /\.css$/,
-      loader: 'stype!css'
-    }]
+      loader: 'style-loader!css-loader'
+    },
+      { test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' }
+    ]
   }
 };

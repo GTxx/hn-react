@@ -1,11 +1,11 @@
 ## install
 ```
-bower install
+npm install
 ```
 
 ## run
 ```
-python -m SimpleHTTPServer
+npm run dev
 ```
 
-then you can visit **http://localhost:8000** to see it
+then you can visit **http://localhost:8080** to see it

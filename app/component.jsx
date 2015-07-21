@@ -2,7 +2,8 @@ var React = require('react');
 var $ = require('jquery');
 var ReactBootstrap = require('react-bootstrap');
 var moment = require('moment');
-//require('bootstrap.css');
+import {Panel, Badge, Pagination} from 'react-bootstrap';
+require('bootstrap/dist/css/bootstrap.css');
 
 class TopStory extends React.Component{
   constructor(props){
@@ -64,13 +65,13 @@ class Item extends React.Component {
     _tmp.href = this.state.data.url;
     var domain = _tmp.hostname;
     return (
-      <ReactBootstrap.Panel
+      <Panel
         header={<h4><a href={this.state.data.url}>{this.state.data.title}</a> ({domain}) | {this.state.data.type}</h4>}>
-        <ReactBootstrap.Badge>
+        <Badge>
           {this.state.data.score}
-        </ReactBootstrap.Badge> points by {this.state.data.by} in {moment.unix(this.state.data.time).fromNow()} |
-        <ReactBootstrap.Badge>{this.state.data.descendants}</ReactBootstrap.Badge> comments
-      </ReactBootstrap.Panel>
+        </Badge> points by {this.state.data.by} in {moment.unix(this.state.data.time).fromNow()} |
+        <Badge>{this.state.data.descendants}</Badge> comments
+      </Panel>
     )
   }
 }
@@ -78,14 +79,17 @@ class Item extends React.Component {
 class Paginator extends React.Component {
   constructor(props){
     super(props);
-    this.state = {currentPage: 1}
+    this.state = {currentPage: 1};
+    this.handleSelect = this.handleSelect.bind(this);
   }
   handleSelect(event, selectedEvent) {
+    console.log(event)
+    console.log(selectedEvent)
     this.setState({currentPage: selectedEvent.eventKey});
   }
   render() {
     return (
-      <ReactBootstrap.Pagination
+      <Pagination
         prev={true}
         next={true}
         first={true}

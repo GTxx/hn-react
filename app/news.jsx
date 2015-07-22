@@ -1,20 +1,26 @@
-import {ItemList, Paginator} from './component.jsx';
+import {ItemList} from './component.jsx';
 import React from 'react';
-import $ from 'jquery';
+import request from 'superagent';
+import {Pagination} from 'react-bootstrap';
 
 class NewStory extends React.Component {
   constructor(props){
     super(props);
     this.state = {storyList: [], currentPage: 0}
+    this.handlePageSelect = this.handlePageSelect.bind(this)
   }
   componentDidMount() {
-    $.get('https://hacker-news.firebaseio.com/v0/newstories.json')
-      .done(function (data) {
-        this.setState({storyList: data, currentPage: 1});
+    request.get('https://hacker-news.firebaseio.com/v0/newstories.json')
+      .end(function(err, res){
+        if (res.ok){
+          this.setState({storyList: res.body, currentPage: 1})
+        }else{
+          console.log('request news, ', err)
+        }
       }.bind(this))
-      .fail(function (xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      })
+  }
+  handlePageSelect(event, selectedEvent){
+    this.setState({currentPage: selectedEvent.eventKey})
   }
   render() {
     let page = this.state.currentPage;
@@ -22,7 +28,17 @@ class NewStory extends React.Component {
     return (
       <div className='newsList'>
         <ItemList data={story_in_current_page}/>
-        <Paginator storyList={this.state.storyList}/>
+        <Pagination
+          prev={true}
+          next={true}
+          first={true}
+          last={true}
+          ellipsis={true}
+          items={this.state.storyList.length}
+          maxButtons={10}
+          activePage={this.state.currentPage}
+          onSelect={this.handlePageSelect}
+          />
       </div>
     )
   }

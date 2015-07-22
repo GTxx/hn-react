@@ -1,5 +1,4 @@
 var React = require('react');
-var $ = require('jquery');
 var ReactBootstrap = require('react-bootstrap');
 var moment = require('moment');
 import {Panel, Badge, Pagination} from 'react-bootstrap';
@@ -13,17 +12,14 @@ class TopStory extends React.Component{
     this.handlePageSelect = this.handlePageSelect.bind(this);
   }
   componentDidMount() {
-    $.get("https://hacker-news.firebaseio.com/v0/topstories.json")
-      .done(function (data) {
-        console.log(data);
-        this.setState({
-          storyList: data,
-          currentPage: 1
-        });
+    request.get('https://hacker-news.firebaseio.com/v0/topstories.json')
+      .end(function(err, res){
+        if(res.ok){
+          this.setState({storyList: res.body, currentPage: 1})
+        }else{
+          console.log('request topstory, ', err)
+        }
       }.bind(this))
-      .fail(function (xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      })
   }
   handlePageSelect(event, selectedEvent) {
     console.log(event)
@@ -74,13 +70,15 @@ class Item extends React.Component {
   }
   componentDidMount() {
     console.log('render item ', this.props.itemId)
-    $.get('https://hacker-news.firebaseio.com/v0/item/' + this.props.itemId + '.json')
-      .done(function (data) {
-        this.setState({data: data})
+
+    request.get('https://hacker-news.firebaseio.com/v0/item/' + this.props.itemId + '.json')
+      .end(function(err, res){
+        if(res.ok){
+          this.setState({data: res.body})
+        }else{
+          console.log('request item ', this.props.itemId, 'fail. ', err)
+        }
       }.bind(this))
-      .fail(function (xhr, status, err) {
-        console.error(this.props.itemId, status, err.toString());
-      })
   }
   componentWillReceiveProps(nextProps){
     console.log('render item again', nextProps.itemId)
@@ -94,14 +92,6 @@ class Item extends React.Component {
           console.log('request item ', nextProps.itemId, 'fail. ', err)
         }
       }.bind(this))
-    //$.get('https://hacker-news.firebaseio.com/v0/item/' + nextProps.itemId + '.json')
-    //  .done(function (data) {
-    //    this.setState({data: data})
-    //  }.bind(this))
-    //  .fail(function (xhr, status, err) {
-    //    console.error(this.nextProps.itemId, status, err.toString());
-    //  })
-
   }
   render() {
     var _tmp = document.createElement('a');
@@ -119,32 +109,4 @@ class Item extends React.Component {
   }
 }
 
-class Paginator extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {currentPage: 1};
-    this.handleSelect = this.handleSelect.bind(this);
-  }
-  handleSelect(event, selectedEvent) {
-    console.log(event)
-    console.log(selectedEvent)
-    this.setState({currentPage: selectedEvent.eventKey});
-  }
-  render() {
-    return (
-      <Pagination
-        prev={true}
-        next={true}
-        first={true}
-        last={true}
-        ellipsis={true}
-        items={this.props.storyList.length}
-        maxButtons={10}
-        activePage={this.state.currentPage}
-        onSelect={this.handleSelect}
-        />
-    )
-  }
-}
-
-export {TopStory, ItemList,  Paginator};
+export {TopStory, ItemList};

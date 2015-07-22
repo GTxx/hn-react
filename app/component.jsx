@@ -3,12 +3,14 @@ var $ = require('jquery');
 var ReactBootstrap = require('react-bootstrap');
 var moment = require('moment');
 import {Panel, Badge, Pagination} from 'react-bootstrap';
+import request from 'superagent';
 require('bootstrap/dist/css/bootstrap.css');
 
 class TopStory extends React.Component{
   constructor(props){
     super(props);
     this.state = {storyList: [], currentPage: 0}
+    this.handlePageSelect = this.handlePageSelect.bind(this);
   }
   componentDidMount() {
     $.get("https://hacker-news.firebaseio.com/v0/topstories.json")
@@ -23,13 +25,31 @@ class TopStory extends React.Component{
         console.error(this.props.url, status, err.toString());
       })
   }
+  handlePageSelect(event, selectedEvent) {
+    console.log(event)
+    console.log(selectedEvent)
+    this.setState({currentPage: selectedEvent.eventKey});
+    console.log(this.state)
+  }
   render() {
     let page = this.state.currentPage;
+    console.log(page);
     var story_in_current_page = this.state.storyList.slice((page - 1) * 10, page * 10)
+    console.log(story_in_current_page)
     return (
       <div className="newsList">
         <ItemList data={story_in_current_page}/>
-        <Paginator storyList={this.state.storyList}/>
+        <Pagination
+          prev={true}
+          next={true}
+          first={true}
+          last={true}
+          ellipsis={true}
+          items={this.state.storyList.length}
+          maxButtons={10}
+          activePage={this.state.currentPage}
+          onSelect={this.handlePageSelect}
+          />
       </div>
     )
   }
@@ -40,6 +60,7 @@ class ItemList extends React.Component {
     var storyNodes = this.props.data.map(function (itemId, index) {
       return (<Item itemId={itemId} key={index}/>)
     });
+    console.log('render itemlist')
     return (
       <div className="newsNodes">{storyNodes}</div>
     );
@@ -52,6 +73,7 @@ class Item extends React.Component {
     this.state = {data: []}
   }
   componentDidMount() {
+    console.log('render item ', this.props.itemId)
     $.get('https://hacker-news.firebaseio.com/v0/item/' + this.props.itemId + '.json')
       .done(function (data) {
         this.setState({data: data})
@@ -59,6 +81,27 @@ class Item extends React.Component {
       .fail(function (xhr, status, err) {
         console.error(this.props.itemId, status, err.toString());
       })
+  }
+  componentWillReceiveProps(nextProps){
+    console.log('render item again', nextProps.itemId)
+    request
+      .get('https://hacker-news.firebaseio.com/v0/item/' + nextProps.itemId + '.json')
+      .end(function(err, res){
+        console.log(err, res)
+        if(res.ok){
+          this.setState({data: res.body})
+        }else{
+          console.log('request item ', nextProps.itemId, 'fail. ', err)
+        }
+      }.bind(this))
+    //$.get('https://hacker-news.firebaseio.com/v0/item/' + nextProps.itemId + '.json')
+    //  .done(function (data) {
+    //    this.setState({data: data})
+    //  }.bind(this))
+    //  .fail(function (xhr, status, err) {
+    //    console.error(this.nextProps.itemId, status, err.toString());
+    //  })
+
   }
   render() {
     var _tmp = document.createElement('a');

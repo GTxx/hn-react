@@ -8,6 +8,7 @@ import {Show} from './show.jsx';
 import {Jobs} from './job.jsx';
 import {Ask} from './ask.jsx';
 import {Nav, NavItem} from 'react-bootstrap';
+import {UserProfile} from './user.jsx';
 
 
 class Header extends React.Component {
@@ -54,6 +55,7 @@ let routers = (
     <Route path='/show' name='show' handler={Show}/>
     <Route path='/ask' name='ask' handler={Ask}/>
     <Route path='/jobs' name='jobs' handler={Jobs}/>
+    <Route path='/user/:id' name='user' handler={UserProfile}/>
   </Route>
 );
 

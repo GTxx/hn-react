@@ -3,6 +3,7 @@ var ReactBootstrap = require('react-bootstrap');
 var moment = require('moment');
 import {Panel, Badge, Pagination} from 'react-bootstrap';
 import request from 'superagent';
+import {Link} from 'react-router';
 require('bootstrap/dist/css/bootstrap.css');
 
 class TopStory extends React.Component{
@@ -97,12 +98,11 @@ class Item extends React.Component {
     var _tmp = document.createElement('a');
     _tmp.href = this.state.data.url;
     var domain = _tmp.hostname;
+    let params = {id: this.state.data.by}
     return (
       <Panel
         header={<h4><a href={this.state.data.url}>{this.state.data.title}</a> ({domain}) | {this.state.data.type}</h4>}>
-        <Badge>
-          {this.state.data.score}
-        </Badge> points by {this.state.data.by} in {moment.unix(this.state.data.time).fromNow()} |
+        <Badge>{this.state.data.score}</Badge> points by <a href={`#/user/${this.state.data.by}`}> {this.state.data.by}</a> in {moment.unix(this.state.data.time).fromNow()} |
         <Badge>{this.state.data.descendants}</Badge> comments
       </Panel>
     )

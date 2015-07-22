@@ -1,5 +1,6 @@
 import React from 'react';
 import request from 'superagent';
+import moment from 'moment';
 
 class UserProfile extends React.Component {
   constructor(props){
@@ -24,7 +25,7 @@ class UserProfile extends React.Component {
       <div>
         <ul>
           <li>user: {this.state.user.id}</li>
-          <li>created: {this.state.user.created}</li>
+          <li>created: {moment.unix(this.state.user.created).fromNow()}</li>
           <li>karma: {this.state.user.karma}</li>
           <li>about: {this.state.user.about}</li>
         </ul>

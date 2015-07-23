@@ -21,10 +21,13 @@ class Jobs extends React.Component{
   }
 
   handlePageSelect(event, selectedEvent){
-    this.setState({currentPage: selectedEvent.eventKey})
+    if (this.state.currentPage != selectedEvent.eventKey){
+      this.setState({currentPage: selectedEvent.eventKey})
+    }
   }
   render() {
     let page = this.state.currentPage;
+    let total_page = Math.ceil(this.state.storyList.length/10);
     let story_in_current_page = this.state.storyList.slice((page - 1) * 10, page * 10);
     return (
       <div className='newsList'>
@@ -35,8 +38,8 @@ class Jobs extends React.Component{
           first={true}
           last={true}
           ellipsis={true}
-          items={this.state.storyList.length}
-          maxButtons={10}
+          items={total_page}
+          maxButtons={Math.min(10, total_page)}
           activePage={this.state.currentPage}
           onSelect={this.handlePageSelect}
           />

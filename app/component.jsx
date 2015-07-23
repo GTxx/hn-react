@@ -23,16 +23,14 @@ class TopStory extends React.Component{
       }.bind(this))
   }
   handlePageSelect(event, selectedEvent) {
-    console.log(event)
-    console.log(selectedEvent)
-    this.setState({currentPage: selectedEvent.eventKey});
-    console.log(this.state)
+    if (this.state.currentPage != selectedEvent.eventKey) {
+      this.setState({currentPage: selectedEvent.eventKey});
+    }
   }
   render() {
     let page = this.state.currentPage;
-    console.log(page);
+    let total_page = Math.ceil(this.state.storyList.length/10)
     var story_in_current_page = this.state.storyList.slice((page - 1) * 10, page * 10)
-    console.log(story_in_current_page)
     return (
       <div className="newsList">
         <ItemList data={story_in_current_page}/>
@@ -42,8 +40,8 @@ class TopStory extends React.Component{
           first={true}
           last={true}
           ellipsis={true}
-          items={this.state.storyList.length}
-          maxButtons={10}
+          items={total_page}
+          maxButtons={Math.min(10, total_page)}
           activePage={this.state.currentPage}
           onSelect={this.handlePageSelect}
           />

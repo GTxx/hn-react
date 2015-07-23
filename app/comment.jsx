@@ -78,4 +78,17 @@ class Comment extends React.Component {
   }
 }
 
-export {StoryComments}
+class CommentView extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {comment: {}}
+  }
+
+  componentDidMount(){
+    return
+  }
+  render(){
+    return
+  }
+}
+export {StoryComments, CommentView}

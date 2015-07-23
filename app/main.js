@@ -9,7 +9,7 @@ import {Jobs} from './job.jsx';
 import {Ask} from './ask.jsx';
 import {Nav, NavItem} from 'react-bootstrap';
 import {UserProfile} from './user.jsx';
-import {StoryComments} from './comment.jsx'
+import {StoryComments, Comment} from './comment.jsx'
 
 
 class Header extends React.Component {
@@ -58,6 +58,7 @@ let routers = (
     <Route path='/jobs' name='jobs' handler={Jobs}/>
     <Route path='/user/:id' name='user' handler={UserProfile}/>
     <Route path='/story/:id' name='storycomments' handler={StoryComments} />
+    <Route path='/comment/:id' name='comment' handler={Comment} />
   </Route>
 );
 

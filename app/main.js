@@ -1,6 +1,5 @@
 import React from 'react';
 import $ from 'jquery';
-import {TopStory} from './component.jsx';
 import {Router, Route, Link} from 'react-router';
 import ReactRouter from 'react-router';
 import {NewStory} from './news.jsx';
@@ -10,6 +9,7 @@ import {Ask} from './ask.jsx';
 import {Nav, NavItem} from 'react-bootstrap';
 import {UserProfile} from './user.jsx';
 import {StoryComments, Comment} from './comment.jsx'
+import {TopStory} from './topnews.jsx';
 
 
 class Header extends React.Component {

@@ -4,13 +4,14 @@ var moment = require('moment');
 import {Panel, Badge, Pagination} from 'react-bootstrap';
 import request from 'superagent';
 import {Link} from 'react-router';
+import {get_data} from './utils.js'
 require('bootstrap/dist/css/bootstrap.css');
 
 
 class ItemList extends React.Component {
   render() {
     var storyNodes = this.props.data.map(function (itemId, index) {
-      return (<Item itemId={itemId} key={index}/>)
+      return (<Item itemId={itemId} key={index} data={data}/>)
     });
     console.log('render itemlist')
     return (
@@ -27,14 +28,18 @@ class Item extends React.Component {
   componentDidMount() {
     console.log('render item ', this.props.itemId)
 
-    request.get('https://hacker-news.firebaseio.com/v0/item/' + this.props.itemId + '.json')
-      .end(function(err, res){
-        if(res.ok){
-          this.setState({data: res.body})
-        }else{
-          console.log('request item ', this.props.itemId, 'fail. ', err)
-        }
-      }.bind(this))
+    get_data('https://hacker-news.firebaseio.com/v0/item/' + this.props.itemId + '.json', (res) => {
+      localStorage[`item_${this.props.itemId}`] = JSON.stringify(res.body)
+      this.setState({data: res.body})
+    })
+    //request.get('https://hacker-news.firebaseio.com/v0/item/' + this.props.itemId + '.json')
+    //  .end(function(err, res){
+    //    if(res.ok){
+    //      this.setState({data: res.body})
+    //    }else{
+    //      console.log('request item ', this.props.itemId, 'fail. ', err)
+    //    }
+    //  }.bind(this))
   }
   componentWillReceiveProps(nextProps){
     console.log('render item again', nextProps.itemId)

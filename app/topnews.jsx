@@ -2,6 +2,7 @@ import React from 'react';
 import request from 'superagent';
 import {Pagination} from 'react-bootstrap';
 import {ItemList} from './component.jsx';
+import {get_data} from './utils.js'
 
 class TopStory extends React.Component{
   constructor(props){
@@ -10,19 +11,26 @@ class TopStory extends React.Component{
     this.handlePageSelect = this.handlePageSelect.bind(this);
   }
   componentDidMount() {
-    request.get('https://hacker-news.firebaseio.com/v0/topstories.json')
-      .end(function(err, res){
-        if(res.ok){
-          this.setState({storyList: res.body, currentPage: 1})
-        }else{
-          console.log('request topstory, ', err)
-        }
-      }.bind(this))
+    if (!localStorage['top_story']) {
+      get_data('https://hacker-news.firebaseio.com/v0/topstories.json', (res) => {
+        localStorage['top_story'] = JSON.stringify(res.body);
+        this.setState({storyList: res.body, currentPage: 1})
+      })
+    }else{
+      let temp = JSON.parse(localStorage['top_story'])
+      this.setState({storyList: temp, currentPage: 1})
+    }
   }
   handlePageSelect(event, selectedEvent) {
     if (this.state.currentPage != selectedEvent.eventKey) {
       this.setState({currentPage: selectedEvent.eventKey});
     }
+  }
+  refresh() {
+    get_data('https://hacker-news.firebaseio.com/v0/topstories.json', (res) => {
+      localStorage['top_storage'] = res.body
+      this.setState({storyList: res.body, currentPage: 1})
+    })
   }
   render() {
     let page = this.state.currentPage;

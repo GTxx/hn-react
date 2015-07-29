@@ -11,7 +11,7 @@ require('bootstrap/dist/css/bootstrap.css');
 class ItemList extends React.Component {
   render() {
     var storyNodes = this.props.data.map(function (itemId, index) {
-      return (<Item itemId={itemId} key={index} data={data}/>)
+      return (<Item itemId={itemId} key={index} />)
     });
     console.log('render itemlist')
     return (
@@ -26,20 +26,9 @@ class Item extends React.Component {
     this.state = {data: []}
   }
   componentDidMount() {
-    console.log('render item ', this.props.itemId)
-
     get_data('https://hacker-news.firebaseio.com/v0/item/' + this.props.itemId + '.json', (res) => {
-      localStorage[`item_${this.props.itemId}`] = JSON.stringify(res.body)
       this.setState({data: res.body})
     })
-    //request.get('https://hacker-news.firebaseio.com/v0/item/' + this.props.itemId + '.json')
-    //  .end(function(err, res){
-    //    if(res.ok){
-    //      this.setState({data: res.body})
-    //    }else{
-    //      console.log('request item ', this.props.itemId, 'fail. ', err)
-    //    }
-    //  }.bind(this))
   }
   componentWillReceiveProps(nextProps){
     console.log('render item again', nextProps.itemId)

@@ -1,6 +1,6 @@
 import React from 'react';
 import request from 'superagent';
-import {Pagination} from 'react-bootstrap';
+import {Pagination, Button} from 'react-bootstrap';
 import {ItemList} from './component.jsx';
 import {get_data} from './utils.js'
 
@@ -38,6 +38,7 @@ class TopStory extends React.Component{
     var story_in_current_page = this.state.storyList.slice((page - 1) * 10, page * 10)
     return (
       <div className="newsList">
+        <Button bsStyle='primary' onClick={this.refresh.bind(this)}>Refresh</Button>
         <ItemList data={story_in_current_page}/>
         <Pagination
           prev={true}

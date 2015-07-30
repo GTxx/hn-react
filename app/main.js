@@ -6,7 +6,7 @@ import {NewStory} from './news.jsx';
 import {Show} from './show.jsx';
 import {Jobs} from './job.jsx';
 import {Ask} from './ask.jsx';
-import {Nav, NavItem} from 'react-bootstrap';
+import {Nav, NavItem, Col, Navbar, Grid, Row} from 'react-bootstrap';
 import {UserProfile} from './user.jsx';
 import {StoryComments, Comment} from './comment.jsx'
 import {TopStory} from './topnews.jsx';
@@ -18,6 +18,7 @@ class Header extends React.Component {
     this.state = {activeKey: '#/'}
     this.handleSelect = this.handleSelect.bind(this)
   }
+
   handleSelect(selectedKey) {
     console.log(selectedKey);
     this.setState({activeKey: selectedKey})
@@ -26,13 +27,14 @@ class Header extends React.Component {
 
   render() {
     return (
-      <Nav bsStyle='pills' activeKey={this.state.activeKey} onSelect={this.handleSelect}>
-        <NavItem eventKey={'#/'} href='#/'>TopStory</NavItem>
-        <NavItem eventKey={'#/newstory'} href='#/newstory'>newstory</NavItem>
-        <NavItem eventKey={'#/show'} href='#/show'>show</NavItem>
-        <NavItem eventKey={'#/ask'} href='#/ask'>ask</NavItem>
-        <NavItem eventKey={'#/jobs'} href='#/jobs'>jobs</NavItem>
-      </Nav>
+      <Navbar brand={<a href='#'>Hacker News</a>}>
+        <Nav>
+          <NavItem eventKey={'#/newstory'} href='#/newstory'>newstory</NavItem>
+          <NavItem eventKey={'#/show'} href='#/show'>show</NavItem>
+          <NavItem eventKey={'#/ask'} href='#/ask'>ask</NavItem>
+          <NavItem eventKey={'#/jobs'} href='#/jobs'>jobs</NavItem>
+        </Nav>
+      </Navbar>
     )
   }
 }
@@ -40,11 +42,10 @@ class Header extends React.Component {
 class App extends React.Component {
   render() {
     return (
-      <div>
-        <h1>App</h1>
-        <Header />
-        <ReactRouter.RouteHandler />
-      </div>
+      <Grid>
+        <Row><Col><Header /></Col></Row>
+        <Row><Col><ReactRouter.RouteHandler /></Col></Row>
+      </Grid>
     )
   }
 }
@@ -57,8 +58,8 @@ let routers = (
     <Route path='/ask' name='ask' handler={Ask}/>
     <Route path='/jobs' name='jobs' handler={Jobs}/>
     <Route path='/user/:id' name='user' handler={UserProfile}/>
-    <Route path='/story/:id' name='storycomments' handler={StoryComments} />
-    <Route path='/comment/:id' name='comment' handler={Comment} />
+    <Route path='/story/:id' name='storycomments' handler={StoryComments}/>
+    <Route path='/comment/:id' name='comment' handler={Comment}/>
   </Route>
 );
 

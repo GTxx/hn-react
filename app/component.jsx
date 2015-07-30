@@ -5,6 +5,7 @@ import {Panel, Badge, Pagination} from 'react-bootstrap';
 import request from 'superagent';
 import {Link} from 'react-router';
 import {get_data} from './utils.js'
+import {Col} from 'react-bootstrap';
 require('bootstrap/dist/css/bootstrap.css');
 
 
@@ -50,7 +51,7 @@ class Item extends React.Component {
     let params = {id: this.state.data.by}
     return (
       <Panel
-        header={<h4><a href={this.state.data.url}>{this.state.data.title}</a> ({domain}) | {this.state.data.type}</h4>}>
+        header={<h4><a href={this.state.data.url}>{this.state.data.title}</a> ({domain})</h4>}>
         <Badge>{this.state.data.score}</Badge> points by <a href={`#/user/${this.state.data.by}`}> {this.state.data.by}</a> in {moment.unix(this.state.data.time).fromNow()} |
         <a href={`#/story/${this.state.data.id}`}><Badge>{this.state.data.descendants}</Badge> comments</a>
       </Panel>

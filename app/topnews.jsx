@@ -4,41 +4,32 @@ import {Pagination, Button} from 'react-bootstrap';
 import {ItemList} from './component.jsx';
 import {get_data} from './utils.js'
 
-class TopStory extends React.Component{
-  constructor(props){
+class TopStory extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {storyList: [], currentPage: 0}
     this.handlePageSelect = this.handlePageSelect.bind(this);
   }
+
   componentDidMount() {
-    if (!localStorage['top_story']) {
-      get_data('https://hacker-news.firebaseio.com/v0/topstories.json', (res) => {
-        localStorage['top_story'] = JSON.stringify(res.body);
-        this.setState({storyList: res.body, currentPage: 1})
-      })
-    }else{
-      let temp = JSON.parse(localStorage['top_story'])
-      this.setState({storyList: temp, currentPage: 1})
-    }
+    get_data('https://hacker-news.firebaseio.com/v0/topstories.json', (res) => {
+      localStorage.setItem('top_story', JSON.stringify(res.body));
+      this.setState({storyList: res.body, currentPage: 1})
+    })
   }
+
   handlePageSelect(event, selectedEvent) {
     if (this.state.currentPage != selectedEvent.eventKey) {
       this.setState({currentPage: selectedEvent.eventKey});
     }
   }
-  refresh() {
-    get_data('https://hacker-news.firebaseio.com/v0/topstories.json', (res) => {
-      localStorage['top_storage'] = res.body
-      this.setState({storyList: res.body, currentPage: 1})
-    })
-  }
+
   render() {
     let page = this.state.currentPage;
-    let total_page = Math.ceil(this.state.storyList.length/10)
+    let total_page = Math.ceil(this.state.storyList.length / 10)
     var story_in_current_page = this.state.storyList.slice((page - 1) * 10, page * 10)
     return (
       <div className="newsList">
-        <Button bsStyle='primary' onClick={this.refresh.bind(this)}>Refresh</Button>
         <ItemList data={story_in_current_page}/>
         <Pagination
           prev={true}

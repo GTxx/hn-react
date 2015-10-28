@@ -1,7 +1,7 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import {Router, Route, Link} from 'react-router';
-import ReactRouter from 'react-router';
 import {NewStory} from './news.jsx';
 import {Show} from './show.jsx';
 import {Jobs} from './job.jsx';
@@ -44,25 +44,25 @@ class App extends React.Component {
     return (
       <Grid>
         <Row><Col><Header /></Col></Row>
-        <Row><Col><ReactRouter.RouteHandler /></Col></Row>
+        <Row><Col><ReactRouter.Handler /></Col></Row>
       </Grid>
     )
   }
 }
 
 let routers = (
-  <Route handler={App}>
-    <Route path='/' name='topstory' handler={TopStory}/>
-    <Route path='/newstory' name='newstory' handler={NewStory}/>
-    <Route path='/show' name='show' handler={Show}/>
-    <Route path='/ask' name='ask' handler={Ask}/>
-    <Route path='/jobs' name='jobs' handler={Jobs}/>
-    <Route path='/user/:id' name='user' handler={UserProfile}/>
-    <Route path='/story/:id' name='storycomments' handler={StoryComments}/>
-    <Route path='/comment/:id' name='comment' handler={Comment}/>
+  <Route path='/' name='topstory' component={TopStory}>
+    <Route path='/newstory' name='newstory' component={NewStory}/>
+    <Route path='/show' name='show' component={Show}/>
+    <Route path='/ask' name='ask' component={Ask}/>
+    <Route path='/jobs' name='jobs' component={Jobs}/>
+    <Route path='/user/:id' name='user' component={UserProfile}/>
+    <Route path='/story/:id' name='storycomments' component={StoryComments}/>
+    <Route path='/comment/:id' name='comment' component={Comment}/>
   </Route>
 );
 
-ReactRouter.run(routers, ReactRouter.HashLocation, (Root) => {
-  React.render(<Root />, document.getElementById('content'));
-});
+//ReactRouter.run(routers, ReactRouter.HashLocation, (Root) => {
+//  React.render(<Root />, document.getElementById('content'));
+//});
+ReactDOM.render(<Router routers={routers}/>, document.getElementById('content'))

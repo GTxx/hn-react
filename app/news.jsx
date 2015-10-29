@@ -19,6 +19,16 @@ class NewStory extends React.Component {
         }
       }.bind(this))
   }
+  //componentWillReceiveProps(nextProps){
+  //   request.get('https://hacker-news.firebaseio.com/v0/newstories.json')
+  //    .end(function(err, res){
+  //      if (res.ok){
+  //        this.setState({storyList: res.body, currentPage: 1})
+  //      }else{
+  //        console.log('request news, ', err)
+  //      }
+  //    }.bind(this))
+  //}
   handlePageSelect(event, selectedEvent){
     this.setState({currentPage: selectedEvent.eventKey})
   }

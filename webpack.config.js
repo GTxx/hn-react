@@ -2,6 +2,7 @@ var path = require('path');
 var node_modules = path.resolve(__dirname, 'node_modules');
 var pathToReact = path.resolve(node_modules, 'react/dist/react.min.js');
 var pathTojquery = path.resolve(node_modules, 'jquery/dist/jquery.min.js');
+var webpack = require('webpack');
 
 var deps = [
   'react/dist/react.min.js',
@@ -11,8 +12,12 @@ var deps = [
   'react-bootstrap/dist/react-bootstrap.min.js'
 ];
 
-
 var config = {
+  plugins: [
+    new webpack.ProvidePlugin({
+      'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'
+    })
+  ],
   entry: [
     'webpack/hot/dev-server',
     path.resolve(__dirname, 'app/main.js'),

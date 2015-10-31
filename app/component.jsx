@@ -27,22 +27,28 @@ class Item extends React.Component {
     this.state = {data: []}
   }
   componentDidMount() {
-    get_data('https://hacker-news.firebaseio.com/v0/item/' + this.props.itemId + '.json', (res) => {
-      this.setState({data: res.body})
-    })
+    get_data(`https://hacker-news.firebaseio.com/v0/item/${this.props.itemId}.json`, function(res){
+      console.log(this)
+      console.log(res)
+      this.setState({data: res})
+    }.bind(this))
   }
   componentWillReceiveProps(nextProps){
     console.log('render item again', nextProps.itemId)
-    request
-      .get('https://hacker-news.firebaseio.com/v0/item/' + nextProps.itemId + '.json')
-      .end(function(err, res){
-        console.log(err, res)
-        if(res.ok){
-          this.setState({data: res.body})
-        }else{
-          console.log('request item ', nextProps.itemId, 'fail. ', err)
-        }
+    fetch(`https://hacker-news.firebaseio.com/v0/item/${nextProps.itemId}.json`)
+      .then(function(response){
+        this.setState({data: response.body})
       }.bind(this))
+    //request
+    //  .get('https://hacker-news.firebaseio.com/v0/item/' + nextProps.itemId + '.json')
+    //  .end(function(err, res){
+    //    console.log(err, res)
+    //    if(res.ok){
+    //      this.setState({data: res.body})
+    //    }else{
+    //      console.log('request item ', nextProps.itemId, 'fail. ', err)
+    //    }
+    //  }.bind(this))
   }
   render() {
     var _tmp = document.createElement('a');

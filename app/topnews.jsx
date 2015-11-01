@@ -13,8 +13,10 @@ class TopStory extends React.Component {
 
   componentDidMount() {
     get_data('https://hacker-news.firebaseio.com/v0/topstories.json', (res) => {
-      localStorage.setItem('top_story', JSON.stringify(res.body));
-      this.setState({storyList: res.body, currentPage: 1})
+      console.log(this)
+      console.log(res)
+      localStorage.setItem('top_story', JSON.stringify(res));
+      this.setState({storyList: res, currentPage: 1})
     })
   }
 

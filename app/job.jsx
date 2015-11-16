@@ -1,6 +1,5 @@
 import {ItemList} from './component.jsx';
 import React from 'react';
-import request from 'superagent';
 import {Pagination} from 'react-bootstrap';
 
 class Jobs extends React.Component{
@@ -10,14 +9,13 @@ class Jobs extends React.Component{
     this.handlePageSelect = this.handlePageSelect.bind(this)
   }
   componentDidMount () {
-    request.get('https://hacker-news.firebaseio.com/v0/jobstories.json')
-      .end(function(err, res){
-        if(res.ok){
-          this.setState({storyList: res.body, currentPage: 1})
-        }else{
-          console.log('request job, ', err)
-        }
-      }.bind(this))
+    fetch('https://hacker-news.firebaseio.com/v0/jobstories.json')
+      .then((response)=>{
+        return response.json();
+      })
+      .then((data)=>{
+        this.setState({storyList: data, currentPage: 1})
+      })
   }
 
   handlePageSelect(event, selectedEvent){

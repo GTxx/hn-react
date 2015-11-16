@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import request from 'superagent';
 import {Panel, Badge, Col, Row} from 'react-bootstrap';
 require('bootstrap/dist/css/bootstrap.css');
 

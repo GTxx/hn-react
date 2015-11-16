@@ -2,7 +2,6 @@ var React = require('react');
 var ReactBootstrap = require('react-bootstrap');
 var moment = require('moment');
 import {Panel, Badge, Pagination} from 'react-bootstrap';
-import request from 'superagent';
 import {Link} from 'react-router';
 import {get_data} from './utils.js'
 import {Col} from 'react-bootstrap';
@@ -39,16 +38,6 @@ class Item extends React.Component {
       .then(function(response){
         this.setState({data: response.body})
       }.bind(this))
-    //request
-    //  .get('https://hacker-news.firebaseio.com/v0/item/' + nextProps.itemId + '.json')
-    //  .end(function(err, res){
-    //    console.log(err, res)
-    //    if(res.ok){
-    //      this.setState({data: res.body})
-    //    }else{
-    //      console.log('request item ', nextProps.itemId, 'fail. ', err)
-    //    }
-    //  }.bind(this))
   }
   render() {
     var _tmp = document.createElement('a');

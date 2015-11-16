@@ -15,9 +15,8 @@
     "react-bootstrap": "^0.27.3",
     "react-dom": "^0.14.0",
     "react-redux": "^4.0.0",
-    "react-router": "^1.0.0-rc3",
+    "react-router": "^1.0.0",
     "redux": "^3.0.4",
-    "superagent": "^1.2.0",
     "webpack": "^1.10.1",
     "webpack-dev-server": "^1.10.1",
     "whatwg-fetch": "^0.10.0"
@@ -26,7 +25,9 @@
     "babel-core": "^5.7.4",
     "babel-loader": "^5.3.2",
     "css-loader": "^0.21.0",
+    "extract-text-webpack-plugin": "^0.9.1",
     "file-loader": "^0.8.4",
+    "html-webpack-plugin": "^1.6.2",
     "i": "^0.3.3",
     "redux-devtools": "^2.1.5",
     "style-loader": "^0.13.0",
@@ -36,7 +37,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "dev": "webpack-dev-server --devtool eval --progress --colors --hot --content-base build"
+    "dev": "webpack-dev-server --devtool eval --progress --colors --hot --content-base build",
+    "deploy": "webpack --config webpack.product.config.js"
   },
   "repository": {
     "type": "git",

@@ -1,7 +1,6 @@
 import {ItemList} from './component.jsx';
 import React from 'react';
 import {Pagination} from 'react-bootstrap';
-import request from 'superagent';
 
 class Show extends React.Component {
   constructor(props) {
@@ -10,14 +9,13 @@ class Show extends React.Component {
     this.handlePageSelect = this.handlePageSelect.bind(this)
   }
   componentDidMount() {
-    request.get('https://hacker-news.firebaseio.com/v0/showstories.json')
-      .end(function(err, res){
-        if(res.ok){
-          this.setState({storyList: res.body, currentPage: 1})
-        }else{
-          console.log('request show, ', err)
-        }
-      }.bind(this))
+    fetch('https://hacker-news.firebaseio.com/v0/showstories.json')
+      .then((response)=>{
+        return response.json();
+      })
+      .then((data)=>{
+        this.setState({storyList: data, currentPage: 1})
+      })
   }
 
   handlePageSelect(event, selectedEvent){

@@ -2,7 +2,6 @@ import {ItemList} from './component.jsx';
 import {Pagination} from 'react-bootstrap';
 import ReactBootstrap from 'react-bootstrap';
 import React from 'react';
-import request from 'superagent';
 
 class Ask extends React.Component{
   constructor(props) {
@@ -11,14 +10,13 @@ class Ask extends React.Component{
     this.handlePageSelect = this.handlePageSelect.bind(this)
   }
   componentDidMount() {
-    request.get('https://hacker-news.firebaseio.com/v0/askstories.json')
-      .end(function(err, res){
-        if(res.ok){
-          this.setState({storyList: res.body, currentPage: 1})
-        }else{
-          console.log('request ask fail. ', err)
-        }
-      }.bind(this))
+    fetch('https://hacker-news.firebaseio.com/v0/askstories.json')
+      .then((response)=>{
+        return response.json()
+      })
+      .then((data)=>{
+        this.setState({storyList: data, currentPage: 1})
+      })
   }
 
   handlePageSelect(event, selectedEvent){

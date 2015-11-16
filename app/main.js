@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import $ from 'jquery';
 import {Router, Route, Link, IndexRoute} from 'react-router';
 import {NewStory} from './news.jsx';
 import {Show} from './show.jsx';

@@ -1,6 +1,5 @@
 import {ItemList} from './component.jsx';
 import React from 'react';
-import request from 'superagent';
 import {Pagination} from 'react-bootstrap';
 
 class NewStory extends React.Component {
@@ -10,25 +9,15 @@ class NewStory extends React.Component {
     this.handlePageSelect = this.handlePageSelect.bind(this)
   }
   componentDidMount() {
-    request.get('https://hacker-news.firebaseio.com/v0/newstories.json')
-      .end(function(err, res){
-        if (res.ok){
-          this.setState({storyList: res.body, currentPage: 1})
-        }else{
-          console.log('request news, ', err)
-        }
-      }.bind(this))
+    fetch('https://hacker-news.firebaseio.com/v0/newstories.json')
+      .then((response)=>{
+        return response.json();
+      })
+      .then((data)=>{
+        this.setState({storyList: data, currentPage: 1})
+      })
   }
-  //componentWillReceiveProps(nextProps){
-  //   request.get('https://hacker-news.firebaseio.com/v0/newstories.json')
-  //    .end(function(err, res){
-  //      if (res.ok){
-  //        this.setState({storyList: res.body, currentPage: 1})
-  //      }else{
-  //        console.log('request news, ', err)
-  //      }
-  //    }.bind(this))
-  //}
+
   handlePageSelect(event, selectedEvent){
     this.setState({currentPage: selectedEvent.eventKey})
   }

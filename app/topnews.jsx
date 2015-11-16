@@ -1,5 +1,4 @@
 import React from 'react';
-import request from 'superagent';
 import {Pagination, Button} from 'react-bootstrap';
 import {ItemList} from './component.jsx';
 import {get_data} from './utils.js'

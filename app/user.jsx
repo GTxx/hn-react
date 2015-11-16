@@ -1,5 +1,4 @@
 import React from 'react';
-import request from 'superagent';
 import moment from 'moment';
 
 class UserProfile extends React.Component {
@@ -11,14 +10,14 @@ class UserProfile extends React.Component {
     console.log(`mount user profile ${this.props}`)
     console.log(this.props)
     let id = this.props.params.id;
-    request.get(`https://hacker-news.firebaseio.com/v0/user/${id}.json`)
-      .end(function(err, res){
-        if(res.ok){
-          this.setState({user: res.body})
-        }else{
-          console.log(`request user ${this.props.userId} fail, $(err)`)
-        }
-      }.bind(this))
+    fetch(`https://hacker-news.firebaseio.com/v0/user/${id}.json`)
+      .then((response)=>{
+        return response.json();
+      })
+      .then((data)=>{
+        this.setState({user: data})
+      })
+
   }
   render(){
     return (

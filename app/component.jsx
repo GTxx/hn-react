@@ -48,7 +48,8 @@ class Item extends React.Component {
       <Panel
         header={<h4><a href={this.state.data.url}>{this.state.data.title}</a> ({domain})</h4>}>
         <Badge>{this.state.data.score}</Badge> points by <a href={`#/user/${this.state.data.by}`}> {this.state.data.by}</a> in {moment.unix(this.state.data.time).fromNow()} |
-        <a href={`#/story/${this.state.data.id}`}><Badge>{this.state.data.descendants}</Badge> comments</a>
+        qweqwe
+        <Link to={`/story/${this.state.data.id}`}><Badge>{this.state.data.descendants}</Badge> comments</Link>
       </Panel>
     )
   }

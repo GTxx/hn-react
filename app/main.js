@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Router, Route, Link, IndexRoute} from 'react-router';
+import createBrowserHistory from 'history/lib/createBrowserHistory'
 import {NewStory} from './news.jsx';
 import {Show} from './show.jsx';
 import {Jobs} from './job.jsx';
@@ -27,12 +28,12 @@ class Header extends React.Component {
   render() {
     return (
       <Navbar>
-        <NavBrand><a href='#'>Hacker News</a></NavBrand>
+        <NavBrand><a href='/'>Hacker News</a></NavBrand>
         <Nav>
-          <NavItem eventKey={'#/newstory'} href='#/newstory'>newstory</NavItem>
-          <NavItem eventKey={'#/show'} href='#/show'>show</NavItem>
-          <NavItem eventKey={'#/ask'} href='#/ask'>ask</NavItem>
-          <NavItem eventKey={'#/jobs'} href='#/jobs'>jobs</NavItem>
+          <NavItem eventKey={'#/newstory'} href='/newstory'>newstory</NavItem>
+          <NavItem eventKey={'#/show'} href='/show'>show</NavItem>
+          <NavItem eventKey={'#/ask'} href='/ask'>ask</NavItem>
+          <NavItem eventKey={'#/jobs'} href='/jobs'>jobs</NavItem>
         </Nav>
       </Navbar>
     )
@@ -50,8 +51,14 @@ class App extends React.Component {
   }
 }
 
+class NoMatch extends React.Component {
+  render(){
+    return (<h2>not found</h2>)
+  }
+}
+
 ReactDOM.render(
-  <Router>
+  <Router history={createBrowserHistory()}>
     <Route path='/' name='main' component={App}>
       <IndexRoute component={TopStory} />
       <Route path='/newstory' name='newstory' component={NewStory}/>
@@ -62,4 +69,5 @@ ReactDOM.render(
       <Route path='/story/:id' name='storycomments' component={StoryComments}/>
       <Route path='/comment/:id' name='comment' component={Comment}/>
     </Route>
+    <Route path='*' component={NoMatch} />
   </Router>, document.getElementById('content'))

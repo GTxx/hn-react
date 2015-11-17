@@ -29,6 +29,9 @@ var config = {
       {test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader')},
       {test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' }
     ]
+  },
+  devServer: {
+    historyApiFallback: true
   }
 };
 

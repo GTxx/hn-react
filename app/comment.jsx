@@ -13,14 +13,11 @@ class StoryComments extends React.Component {
   componentDidMount() {
     console.log(this.props)
     let id = this.props.params.id;
-    request.get(`http://hn.algolia.com/api/v1/items/${id}`)
-      .end(function (err, res) {
-        if (res.ok) {
-          this.setState({story: res.body})
-        } else {
-          console.log('request story comment, ', err)
-        }
-      }.bind(this))
+    fetch(`http://hn.algolia.com/api/v1/items/${id}`)
+      .then((response)=>response.json())
+      .then((data)=>{
+        this.setState({story: data})
+      })
   }
 
   render() {

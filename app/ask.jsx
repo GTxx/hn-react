@@ -1,6 +1,6 @@
 import {ItemList} from './component.jsx';
 import {Pagination} from 'react-bootstrap';
-import {get_data} from './utils.js';
+import {get_data, Paginate} from './utils.js';
 import ReactBootstrap from 'react-bootstrap';
 import React from 'react';
 import Loader from 'react-loader';
@@ -21,8 +21,8 @@ class Ask extends React.Component {
       })
       .then((data)=> {
         let state = {storyList: data, currentPage: 1};
-        let storyOfCurrentPage = state.storyList.slice((state.currentPage - 1) * 10, state.currentPage * 10);
-        async.map(storyOfCurrentPage, (itemId, cb)=> {
+        let pagination = new Paginate(data, 1)
+        async.map(pagination.currentPageItems, (itemId, cb)=> {
           get_data(`https://hacker-news.firebaseio.com/v0/item/${itemId}.json`, function (res) {
             return cb(null, res);
           })
@@ -35,7 +35,16 @@ class Ask extends React.Component {
 
   handlePageSelect(event, selectedEvent) {
     if (this.state.currentPage != selectedEvent.eventKey) {
-      this.setState({currentPage: selectedEvent.eventKey})
+      let currentPage = selectedEvent.eventKey;
+      this.setState({currentPage, loaded: false})
+      let pagination = new Paginate(this.state.storyList, currentPage)
+      async.map(pagination.currentPageItems, (itemId, cb)=> {
+          get_data(`https://hacker-news.firebaseio.com/v0/item/${itemId}.json`, function (res) {
+            return cb(null, res);
+          })
+        }, (err, result)=> {
+          this.setState({currentPageData: result, loaded: true})
+        })
     }
   }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Pagination, Button} from 'react-bootstrap';
 import {ItemList} from './component.jsx';
-import {get_data} from './utils.js'
+import {get_data, Paginate} from './utils.js'
 import Loader from 'react-loader';
 import async from 'async';
 
@@ -16,14 +16,12 @@ class TopStory extends React.Component {
 
   componentDidMount() {
     get_data('https://hacker-news.firebaseio.com/v0/topstories.json', (res) => {
-      let state = {storyList: res, currentPage: 1, loaded: false};
-      let storyOfCurrentPage = state.storyList.slice((state.currentPage - 1) * 10, state.currentPage * 10);
-      async.map(storyOfCurrentPage, (itemId, cb)=> {
+      let pagination = new Paginate(res, 1)
+      async.map(pagination.currentPageItems, (itemId, cb)=> {
         get_data(`https://hacker-news.firebaseio.com/v0/item/${itemId}.json`, function (res) {
           return cb(null, res);
         })
       }, (err, result)=> {
-        debugger
         this.setState({storyList: res, currentPage: 1, loaded: true, currentPageData: result})
       })
     })
@@ -33,9 +31,8 @@ class TopStory extends React.Component {
     if (this.state.currentPage != selectedEvent.eventKey) {
       let currentPage = selectedEvent.eventKey;
       this.setState({currentPage, loaded: false});
-
-      let storyOfCurrentPage = this.state.storyList.slice((currentPage - 1) * 10, currentPage * 10);
-      async.map(storyOfCurrentPage, (itemId, cb)=> {
+      let pagination = new Paginate(this.state.storyList, currentPage);
+      async.map(pagination.currentPageItems, (itemId, cb)=> {
         get_data(`https://hacker-news.firebaseio.com/v0/item/${itemId}.json`, function (res) {
           return cb(null, res);
         })

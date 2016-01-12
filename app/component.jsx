@@ -5,15 +5,14 @@ import {Panel, Badge, Pagination} from 'react-bootstrap';
 import {Link} from 'react-router';
 import {get_data} from './utils.js'
 import {Col} from 'react-bootstrap';
-require('bootstrap/dist/css/bootstrap.css');
 
 
 class ItemList extends React.Component {
+
   render() {
-    var storyNodes = this.props.data.map(function (itemId, index) {
-      return (<Item itemId={itemId} key={index} />)
+    var storyNodes = this.props.data.map(function (item, index) {
+      return (<Item key={index} data={item} />)
     });
-    console.log('render itemlist')
     return (
       <div className="newsNodes">{storyNodes}</div>
     );
@@ -21,35 +20,16 @@ class ItemList extends React.Component {
 }
 
 class Item extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {data: []}
-  }
-  componentDidMount() {
-    get_data(`https://hacker-news.firebaseio.com/v0/item/${this.props.itemId}.json`, function(res){
-      console.log(this)
-      console.log(res)
-      this.setState({data: res})
-    }.bind(this))
-  }
-  componentWillReceiveProps(nextProps){
-    console.log('render item again', nextProps.itemId)
-    fetch(`https://hacker-news.firebaseio.com/v0/item/${nextProps.itemId}.json`)
-      .then(function(response){
-        this.setState({data: response.body})
-      }.bind(this))
-  }
+
   render() {
     var _tmp = document.createElement('a');
-    _tmp.href = this.state.data.url;
+    _tmp.href = this.props.data.url;
     var domain = _tmp.hostname;
-    let params = {id: this.state.data.by}
     return (
       <Panel
-        header={<h4><a href={this.state.data.url}>{this.state.data.title}</a> ({domain})</h4>}>
-        <Badge>{this.state.data.score}</Badge> points by <a href={`#/user/${this.state.data.by}`}> {this.state.data.by}</a> in {moment.unix(this.state.data.time).fromNow()} |
-        qweqwe
-        <Link to={`/story/${this.state.data.id}`}><Badge>{this.state.data.descendants}</Badge> comments</Link>
+        header={<h4><a href={this.props.data.url}>{this.props.data.title}</a> ({domain})</h4>}>
+        <Badge>{this.props.data.score}</Badge> points by <a href={`#/user/${this.props.data.by}`}> {this.props.data.by}</a> in {moment.unix(this.props.data.time).fromNow()} |
+        <Link to={`/story/${this.props.data.id}`}><Badge>{this.props.data.descendants}</Badge> comments</Link>
       </Panel>
     )
   }

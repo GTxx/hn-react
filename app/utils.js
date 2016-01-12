@@ -1,8 +1,6 @@
 function get_data(url, ok_func, fail_func){
   fetch(url)
     .then(function(response){
-      console.log(response.status)
-      console.log(response)
       if(response.ok){
         return response.json();
       }else{
@@ -12,7 +10,6 @@ function get_data(url, ok_func, fail_func){
       }
     })
     .then(function(json){
-      console.log(json)
       ok_func(json)
     })
 

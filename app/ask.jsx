@@ -1,49 +1,63 @@
 import {ItemList} from './component.jsx';
 import {Pagination} from 'react-bootstrap';
+import {get_data} from './utils.js';
 import ReactBootstrap from 'react-bootstrap';
 import React from 'react';
+import Loader from 'react-loader';
+import async from 'async';
 
-class Ask extends React.Component{
+
+class Ask extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {storyList: [], currentPage: 0}
+    this.state = {storyList: [], currentPage: 0, loaded: false}
     this.handlePageSelect = this.handlePageSelect.bind(this)
   }
+
   componentDidMount() {
     fetch('https://hacker-news.firebaseio.com/v0/askstories.json')
-      .then((response)=>{
+      .then((response)=> {
         return response.json()
       })
-      .then((data)=>{
-        this.setState({storyList: data, currentPage: 1})
+      .then((data)=> {
+        let state = {storyList: data, currentPage: 1};
+        let storyOfCurrentPage = state.storyList.slice((state.currentPage - 1) * 10, state.currentPage * 10);
+        async.map(storyOfCurrentPage, (itemId, cb)=> {
+          get_data(`https://hacker-news.firebaseio.com/v0/item/${itemId}.json`, function (res) {
+            return cb(null, res);
+          })
+        }, (err, result)=> {
+          let state1 = Object.assign({}, this.state, state, {currentPageData: result, loaded: true})
+          this.setState({...state1})
+        })
       })
   }
 
-  handlePageSelect(event, selectedEvent){
+  handlePageSelect(event, selectedEvent) {
     if (this.state.currentPage != selectedEvent.eventKey) {
       this.setState({currentPage: selectedEvent.eventKey})
     }
   }
 
   render() {
-    let page = this.state.currentPage;
-    let total_page = Math.ceil(this.state.storyList.length/10)
-    let story_in_current_page = this.state.storyList.slice((page - 1) * 10, page * 10);
+    let total_page = Math.ceil(this.state.storyList.length / 10)
     return (
-      <div className='newsList'>
-        <ItemList data={story_in_current_page}/>
-        <Pagination
-          prev={true}
-          next={true}
-          first={true}
-          last={true}
-          ellipsis={true}
-          items={total_page}
-          maxButtons={Math.min(10, total_page)}
-          activePage={this.state.currentPage}
-          onSelect={this.handlePageSelect}
-          />
-      </div>
+      <Loader loaded={this.state.loaded}>
+        <div className='newsList'>
+          <ItemList data={this.state.currentPageData}/>
+          <Pagination
+            prev={true}
+            next={true}
+            first={true}
+            last={true}
+            ellipsis={true}
+            items={total_page}
+            maxButtons={Math.min(10, total_page)}
+            activePage={this.state.currentPage}
+            onSelect={this.handlePageSelect}
+            />
+        </div>
+      </Loader>
     )
   }
 }

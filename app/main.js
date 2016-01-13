@@ -2,14 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Router, Route, Link, IndexRoute} from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory'
-import {NewStory} from './news.jsx';
-import {Show} from './show.jsx';
-import {Jobs} from './job.jsx';
-import {Ask} from './ask.jsx';
 import {Nav, NavItem, Col, Navbar, NavBrand, Grid, Row} from 'react-bootstrap';
 import {UserProfile} from './user.jsx';
 import {StoryComments, Comment} from './comment.jsx'
 import {TopStory} from './topnews.jsx';
+import {StoryList} from './storyList.jsx';
 
 
 class Header extends React.Component {
@@ -30,10 +27,10 @@ class Header extends React.Component {
       <Navbar>
         <NavBrand><a href='/'>Hacker News</a></NavBrand>
         <Nav>
-          <NavItem eventKey={'#/newstory'} href='/newstory'>newstory</NavItem>
-          <NavItem eventKey={'#/show'} href='/show'>show</NavItem>
-          <NavItem eventKey={'#/ask'} href='/ask'>ask</NavItem>
-          <NavItem eventKey={'#/jobs'} href='/jobs'>jobs</NavItem>
+          <NavItem eventKey={'#/news/newstory'} href='/news/newstories'>newstory</NavItem>
+          <NavItem eventKey={'#/news/show'} href='/news/show'>show</NavItem>
+          <NavItem eventKey={'#/news/ask'} href='/news/asks'>ask</NavItem>
+          <NavItem eventKey={'#/news/jobs'} href='/news/jobs'>jobs</NavItem>
         </Nav>
       </Navbar>
     )
@@ -61,10 +58,7 @@ ReactDOM.render(
   <Router history={createBrowserHistory()}>
     <Route path='/' name='main' component={App}>
       <IndexRoute component={TopStory} />
-      <Route path='/newstory' name='newstory' component={NewStory}/>
-      <Route path='/show' name='show' component={Show}/>
-      <Route path='/ask' name='ask' component={Ask}/>
-      <Route path='/jobs' name='jobs' component={Jobs}/>
+      <Route path='/news/:category' name='news' component={StoryList} />
       <Route path='/user/:id' name='user' component={UserProfile}/>
       <Route path='/story/:id' name='storycomments' component={StoryComments}/>
       <Route path='/comment/:id' name='comment' component={Comment}/>

@@ -4,6 +4,8 @@ import {Pagination} from 'react-bootstrap';
 import Loader from 'react-loader';
 import async from 'async';
 import {get_data, Paginate} from './utils.js';
+import store from './main.js';
+import {fetchStories} from './actions.js';
 
 const CategoryUrl = {
   topnews: 'https://hacker-news.firebaseio.com/v0/topstories.json',
@@ -40,6 +42,7 @@ class StoryList extends React.Component {
   }
 
   componentDidMount() {
+    store.dispatch(fetchStories())
     let url = CategoryUrl[this.props.params.category]
     this.getInitData(url)
   }

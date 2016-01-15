@@ -7,6 +7,25 @@ import {UserProfile} from './user.jsx';
 import {StoryComments, Comment} from './comment.jsx'
 import {TopStory} from './topnews.jsx';
 import {StoryList} from './storyList.jsx';
+import {Provider} from 'react-redux';
+import thunkMiddleware from 'redux-thunk'
+import createLogger from 'redux-logger';
+import {createStore, applyMiddleware} from 'redux';
+import {syncHistory, routeRedux} from 'redux-simple-router';
+
+const history = createBrowserHistory();
+const reduxRouterMiddleware = syncHistory(history);
+
+const createStoreWithMiddleware = applyMiddleware(
+  thunkMiddleware,
+  createLogger,
+  reduxRouterMiddleware
+)(createStore);
+
+
+const store = createStoreWithMiddleware()
+
+reduxRouterMiddleware.listenForReplays(store)
 
 
 class Header extends React.Component {
@@ -49,19 +68,21 @@ class App extends React.Component {
 }
 
 class NoMatch extends React.Component {
-  render(){
+  render() {
     return (<h2>not found</h2>)
   }
 }
 
 ReactDOM.render(
-  <Router history={createBrowserHistory()}>
-    <Route path='/' name='main' component={App}>
-      <IndexRoute component={TopStory} />
-      <Route path='/news/:category' name='news' component={StoryList} />
-      <Route path='/user/:id' name='user' component={UserProfile}/>
-      <Route path='/story/:id' name='storycomments' component={StoryComments}/>
-      <Route path='/comment/:id' name='comment' component={Comment}/>
-    </Route>
-    <Route path='*' component={NoMatch} />
-  </Router>, document.getElementById('content'))
+  <Provider store={store}>
+    <Router history={history}>
+      <Route path='/' name='main' component={App}>
+        <IndexRoute component={TopStory}/>
+        <Route path='/news/:category' name='news' component={StoryList}/>
+        <Route path='/user/:id' name='user' component={UserProfile}/>
+        <Route path='/story/:id' name='storycomments' component={StoryComments}/>
+        <Route path='/comment/:id' name='comment' component={Comment}/>
+      </Route>
+      <Route path='*' component={NoMatch}/>
+    </Router>
+  </Provider>, document.getElementById('content'))

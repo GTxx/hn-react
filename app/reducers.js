@@ -11,19 +11,11 @@ const CategoryUrl = {
 // state example
 const state = {
   selectCategory: 'topnews', // jobs, asks, newstory, show
-  story: {
-    topnews: {
-      isFetching: false,
-      storyList: [],
-      item: {}
-    },
-    jobs :{
-      isFetching: false,
-      storyList: [],
-      item: {}
-    }
+  topnews: {
+    isFetching: false,
+    storyList: [],
+    item: {}
   }
-
 }
 
 function selectedCategory(state = 'topnews', action) {
@@ -37,14 +29,9 @@ function storyList(state = {isFetching: false, items: []}, action) {
   }
 }
 
-function story(state={isFetching: false, storyList: [], item: {}}, action){
-  switch(action.type){
 
-  }
-}
-
-function story(state={}, action){
-  switch(action.type){
+function topnews(state = {isFetching: false, storyList: [], item: []}, action) {
+  switch (action.type) {
     case 'topnews':
     case 'jobs':
       return Object.assign({}, state, {
@@ -54,4 +41,7 @@ function story(state={}, action){
       return state
   }
 }
-const rootReducer = combineReducers()
+const rootReducer = combineReducers(
+  selectedCategory,
+  story
+)

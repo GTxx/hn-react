@@ -17,6 +17,7 @@ function receiveStories(storyIDList, storyList){
   }
 }
 
+// thunk action
 export function fetchStories(storyIdList){
   //获取多个story
   return (dispatch) => {
@@ -32,3 +33,5 @@ export function fetchStories(storyIdList){
     })
   }
 }
+
+export function fetch

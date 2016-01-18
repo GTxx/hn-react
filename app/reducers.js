@@ -1,4 +1,6 @@
 import {combineReducers} from 'redux';
+import {REQUEST_STORY, RECEIVE_STORY_LIST_AND_STORY} from './actions.js';
+
 
 const CategoryUrl = {
   topnews: 'https://hacker-news.firebaseio.com/v0/topstories.json',
@@ -23,25 +25,26 @@ function selectedCategory(state = 'topnews', action) {
   return action.category;
 }
 
-function storyList(state = {isFetching: false, items: []}, action) {
-  switch (action.type) {
-    case
-  }
-}
 
 
-function topnews(state = {isFetching: false, storyList: [], item: []}, action) {
+export function story(state = {isFetching: false, storyList: [], item: []}, action) {
   switch (action.type) {
-    case 'topnews':
-    case 'jobs':
+    case REQUEST_STORY:
       return Object.assign({}, state, {
-        [action.category]: story(state[action.category], action)
+        isFetching: true,
+        didInvalidate: false
+      })
+    case RECEIVE_STORY_LIST_AND_STORY:
+      return Object.assign({}, state, {
+        isFetching: false,
+        storyList: action.storyList,
+        stories: action.stories
       })
     default:
       return state
   }
 }
-const rootReducer = combineReducers(
-  selectedCategory,
+
+export const rootReducer = combineReducers({
   story
-)
+});

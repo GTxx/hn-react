@@ -5,14 +5,14 @@ import createBrowserHistory from 'history/lib/createBrowserHistory'
 import {Nav, NavItem, Col, Navbar, NavBrand, Grid, Row} from 'react-bootstrap';
 import {UserProfile} from './user.jsx';
 import {StoryComments, Comment} from './comment.jsx'
-import {TopStory} from './topnews.jsx';
+import TopStory from './topnews.jsx';
 import {StoryList} from './storyList.jsx';
 import {Provider} from 'react-redux';
 import thunkMiddleware from 'redux-thunk'
 import createLogger from 'redux-logger';
-import {createStore, applyMiddleware} from 'redux';
-import {syncHistory, routeRedux} from 'redux-simple-router';
-
+import {createStore, applyMiddleware, combineReducers} from 'redux';
+import {syncHistory, routeReducer} from 'redux-simple-router';
+import {story} from './reducers.js'
 const history = createBrowserHistory();
 const reduxRouterMiddleware = syncHistory(history);
 
@@ -22,10 +22,15 @@ const createStoreWithMiddleware = applyMiddleware(
   reduxRouterMiddleware
 )(createStore);
 
+const reducer = combineReducers({
+  story: story,
+  routing: routeReducer
+})
 
-const store = createStoreWithMiddleware()
 
-reduxRouterMiddleware.listenForReplays(store)
+const store = createStoreWithMiddleware(reducer, {story: {}})
+
+reduxRouterMiddleware.listenForReplays(store);
 
 
 class Header extends React.Component {

@@ -11,24 +11,47 @@ import {StoryList} from './storyList.jsx';
 
 class TopStory extends React.Component {
 
+  //componentDidMount(){
+  //  const {dispatch, }
+  //}
   render() {
     let params = {category: 'topnews'}
-    return (<StoryList params={params} />)
+    return (
+      <div>
+        <p>123</p>
+        <StoryList params={params} />
+      </div>)
+  }
+}
+
+function mapStateToProps(state) {
+  const { selectedReddit, postsByReddit } = state
+  const {
+    isFetching,
+    lastUpdated,
+    items: posts
+  } = postsByReddit[selectedReddit] || {
+    isFetching: true,
+    items: []
+  }
+
+  return {
+    selectedReddit,
+    posts,
+    isFetching,
+    lastUpdated
   }
 }
 
 function mapStateToProps(state){
-  return {
-    isFetching: false,
-    storyList: [],
-    item: {}
-  }
+  const {story} = state;
+  return story;
 }
 
-import {fetchStories} from './actions.js';
+import {fetchTopStoryList} from './actions.js';
 
 function mapDispatchToProps(dispatch){
-  return {fetchStories: (storyIDList)=> dispatch(fetchStories(storyIDList))}
+  return {fetchStories: ()=> dispatch(fetchTopStoryList(storyIDList))}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TopStory);

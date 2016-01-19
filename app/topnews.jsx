@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import {Pagination, Button} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import Loader from 'react-loader';
@@ -28,6 +28,13 @@ class TopStory extends React.Component {
   }
 }
 
+TopStory.propTypes = {
+  posts: PropTypes.array.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  lastUpdated: PropTypes.number,
+  fetchStoryList: PropTypes.func.isRequired,
+  fetchStoryIdsStoryList: PropTypes.func.isRequired
+}
 
 function mapStateToProps(state){
   const {story, } = state;
@@ -43,8 +50,12 @@ function mapStateToProps(state){
 
 import {fetchTopStoryList} from './actions.js';
 
+
 function mapDispatchToProps(dispatch){
-  return {fetchStories: ()=> dispatch(fetchTopStoryList())}
+  return {
+    fetchStoryIdsStoryList: () => dispatch(fetchTopStoryList()),
+    fetchStoryList: (storyIdList) => dispatch()
+  }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TopStory);

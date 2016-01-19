@@ -27,7 +27,7 @@ function selectedCategory(state = 'topnews', action) {
 
 
 
-export function story(state = {isFetching: true, storyList: [], item: []}, action) {
+export function story(state = {isFetching: true, storyIdList: [], item: []}, action) {
   console.log(action.type)
   switch (action.type) {
     case REQUEST_STORY:
@@ -38,7 +38,7 @@ export function story(state = {isFetching: true, storyList: [], item: []}, actio
     case RECEIVE_STORY_LIST_AND_STORY:
       return Object.assign({}, state, {
         isFetching: false,
-        storyList: action.storyList,
+        storyIdList: action.storyList,
         stories: action.stories
       });
     default:

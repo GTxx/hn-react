@@ -20,38 +20,38 @@ class StoryList extends React.Component {
     super(props);
     this.state = {storyList: [], currentPage: 0, loaded: false}
     this.handlePageSelect = this.handlePageSelect.bind(this)
-    this.getInitData = this.getInitData.bind(this);
+    //this.getInitData = this.getInitData.bind(this);
   }
 
-  getInitData(url){
-    fetch(url)
-      .then((response)=> {
-        return response.json();
-      })
-      .then((data)=> {
-        this.setState({storyList: data, currentPage: 1})
-        let pagination = new Paginate(data, 1);
-        async.map(pagination.currentPageItems, (storyId, cb)=>{
-          get_data(`https://hacker-news.firebaseio.com/v0/item/${storyId}.json`, function (res) {
-            return cb(null, res);
-          })
-        }, (err, result)=>{
-          this.setState({loaded: true, storyList: data, currentPage: 1, currentPageData: result})
-        })
-      })
-  }
+  //getInitData(url){
+  //  fetch(url)
+  //    .then((response)=> {
+  //      return response.json();
+  //    })
+  //    .then((data)=> {
+  //      this.setState({storyList: data, currentPage: 1})
+  //      let pagination = new Paginate(data, 1);
+  //      async.map(pagination.currentPageItems, (storyId, cb)=>{
+  //        get_data(`https://hacker-news.firebaseio.com/v0/item/${storyId}.json`, function (res) {
+  //          return cb(null, res);
+  //        })
+  //      }, (err, result)=>{
+  //        this.setState({loaded: true, storyList: data, currentPage: 1, currentPageData: result})
+  //      })
+  //    })
+  //}
 
-  componentDidMount() {
-    store.dispatch(fetchStories())
-    let url = CategoryUrl[this.props.params.category]
-    this.getInitData(url)
-  }
-
-  componentWillReceiveProps(){
-    let url = CategoryUrl[this.props.params.category]
-    this.setState({loaded: false})
-    this.getInitData(url)
-  }
+  //componentDidMount() {
+  //  store.dispatch(fetchStories())
+  //  let url = CategoryUrl[this.props.params.category]
+  //  this.getInitData(url)
+  //}
+  //
+  //componentWillReceiveProps(){
+  //  let url = CategoryUrl[this.props.params.category]
+  //  this.setState({loaded: false})
+  //  this.getInitData(url)
+  //}
 
   handlePageSelect(event, selectedEvent) {
     let currentPage = selectedEvent.eventKey;
@@ -69,20 +69,20 @@ class StoryList extends React.Component {
   }
 
   render() {
-    let total_page = Math.ceil(this.state.storyList.length / 10);
+    //let total_page = Math.ceil(this.props.storyList.length / 10);
     return (
-      <Loader loaded={this.state.loaded}>
+      <Loader loaded={this.props.loaded}>
         <div className='newsList'>
-          <ItemList data={this.state.currentPageData}/>
+          <ItemList data={this.props.stories}/>
           <Pagination
             prev={true}
             next={true}
             first={true}
             last={true}
             ellipsis={true}
-            items={total_page}
-            maxButtons={Math.min(10, total_page)}
-            activePage={this.state.currentPage}
+            items={10}
+            maxButtons={Math.min(10, 1)}
+            activePage={1}
             onSelect={this.handlePageSelect}
             />
         </div>

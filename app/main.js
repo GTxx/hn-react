@@ -16,9 +16,10 @@ import {story} from './reducers.js'
 const history = createBrowserHistory();
 const reduxRouterMiddleware = syncHistory(history);
 
+const loggerMiddleware = createLogger();
 const createStoreWithMiddleware = applyMiddleware(
   thunkMiddleware,
-  createLogger,
+  loggerMiddleware,
   reduxRouterMiddleware
 )(createStore);
 

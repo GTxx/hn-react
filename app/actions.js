@@ -1,10 +1,13 @@
 import async from 'async';
+import {get_data, Paginate} from './utils.js';
 
-const SELECT_CATEGORY = 'SELECT_CATEGORY';
-const REQUEST_STORY = 'REQUEST_STORY';
-const RECEIVE_STORY = 'RECEIVE_STORY';
 
-const RECEIVE_STORY_LIST_AND_STORY = 'RECEIVE_STORY_LIST_AND_STORY';
+export const SELECT_CATEGORY = 'SELECT_CATEGORY';
+export const REQUEST_STORY = 'REQUEST_STORY';
+export const RECEIVE_STORY = 'RECEIVE_STORY';
+
+export const RECEIVE_STORY_LIST_AND_STORY = 'RECEIVE_STORY_LIST_AND_STORY';
+
 
 
 function requestStory(requestType){
@@ -64,6 +67,7 @@ export function receiveStoryListAndStory(storyList, result){
 }
 
 function requestTopStoryList(){
+  debugger
   return {
     type: REQUEST_STORY
   }

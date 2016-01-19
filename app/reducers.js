@@ -27,24 +27,21 @@ function selectedCategory(state = 'topnews', action) {
 
 
 
-export function story(state = {isFetching: false, storyList: [], item: []}, action) {
+export function story(state = {isFetching: true, storyList: [], item: []}, action) {
+  console.log(action.type)
   switch (action.type) {
     case REQUEST_STORY:
+      debugger
       return Object.assign({}, state, {
-        isFetching: true,
-        didInvalidate: false
-      })
+        isFetching: true
+      });
     case RECEIVE_STORY_LIST_AND_STORY:
       return Object.assign({}, state, {
         isFetching: false,
         storyList: action.storyList,
         stories: action.stories
-      })
+      });
     default:
-      return state
+      return state;
   }
 }
-
-export const rootReducer = combineReducers({
-  story
-});

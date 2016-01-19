@@ -11,47 +11,40 @@ import {StoryList} from './storyList.jsx';
 
 class TopStory extends React.Component {
 
-  //componentDidMount(){
-  //  const {dispatch, }
-  //}
+  componentDidMount(){
+    const {fetchStories} = this.props
+    fetchStories()
+  }
   render() {
-    let params = {category: 'topnews'}
+    console.log(this.props.story)
     return (
-      <div>
-        <p>123</p>
-        <StoryList params={params} />
-      </div>)
+      <Loader loaded={!this.props.story.isFetching}>
+        <div>
+          <StoryList loaded={!this.props.story.isFetching} storyList={this.props.story.storyList}
+                     stories={this.props.story.stories} />
+        </div>
+      </Loader>
+    )
   }
 }
 
-function mapStateToProps(state) {
-  const { selectedReddit, postsByReddit } = state
-  const {
-    isFetching,
-    lastUpdated,
-    items: posts
-  } = postsByReddit[selectedReddit] || {
-    isFetching: true,
-    items: []
-  }
-
-  return {
-    selectedReddit,
-    posts,
-    isFetching,
-    lastUpdated
-  }
-}
 
 function mapStateToProps(state){
-  const {story} = state;
-  return story;
+  const {story, } = state;
+  if (!story){
+    return {
+      isFetching: true,
+      storyList: [],
+      stories: []
+    }
+  }
+  return {story};
 }
 
 import {fetchTopStoryList} from './actions.js';
 
 function mapDispatchToProps(dispatch){
-  return {fetchStories: ()=> dispatch(fetchTopStoryList(storyIDList))}
+  return {fetchStories: ()=> dispatch(fetchTopStoryList())}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TopStory);

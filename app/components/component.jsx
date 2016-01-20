@@ -3,7 +3,7 @@ var ReactBootstrap = require('react-bootstrap');
 var moment = require('moment');
 import {Panel, Badge, Pagination} from 'react-bootstrap';
 import {Link} from 'react-router';
-import {get_data} from './utils.js'
+import {get_data} from './../utils.js'
 import {Col} from 'react-bootstrap';
 
 

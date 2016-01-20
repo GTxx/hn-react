@@ -1,26 +1,15 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import moment from 'moment';
 import {Panel, Badge, Col, Row} from 'react-bootstrap';
-require('bootstrap/dist/css/bootstrap.css');
 
 class StoryComments extends React.Component {
   constructor(props) {
     super(props);
-    //console.log(props)
     this.state = {story: {}}
   }
 
-  componentDidMount() {
-    console.log(this.props)
-    let id = this.props.params.id;
-    fetch(`http://hn.algolia.com/api/v1/items/${id}`)
-      .then((response)=>response.json())
-      .then((data)=>{
-        this.setState({story: data})
-      })
-  }
-
   render() {
+    let {story} = this.props;
     function get_length(comments) {
       let len = comments.length;
       for (let comment of comments) {
@@ -29,7 +18,6 @@ class StoryComments extends React.Component {
       return len;
     }
 
-    let story = this.state.story;
     let comments = []
     let comment_total = 0;
     if (story.hasOwnProperty('children')) {
@@ -59,7 +47,11 @@ class StoryComments extends React.Component {
   }
 }
 
-class Comment extends React.Component {
+StoryComments.propTypes = {
+  story: PropTypes.object.isRequired
+};
+
+export class Comment extends React.Component {
 
   render() {
     let comment = this.props.comment;
@@ -78,18 +70,4 @@ class Comment extends React.Component {
   }
 }
 
-class CommentView extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {comment: {}}
-  }
-
-  componentDidMount() {
-    return
-  }
-
-  render() {
-    return
-  }
-}
-export {StoryComments, CommentView}
+export {StoryComments}

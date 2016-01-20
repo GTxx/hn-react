@@ -7,8 +7,6 @@ class UserProfile extends React.Component {
     this.state = {user: {}}
   }
   componentDidMount(){
-    console.log(`mount user profile ${this.props}`)
-    console.log(this.props)
     let id = this.props.params.id;
     fetch(`https://hacker-news.firebaseio.com/v0/user/${id}.json`)
       .then((response)=>{

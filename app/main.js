@@ -3,33 +3,17 @@ import ReactDOM from 'react-dom';
 import {Router, Route, Link, IndexRoute} from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory'
 import {Nav, NavItem, Col, Navbar, NavBrand, Grid, Row} from 'react-bootstrap';
-import {UserProfile} from './user.jsx';
-import {StoryComments, Comment} from './comment.jsx'
-import TopStory from './topnews.jsx';
-import {StoryList} from './storyList.jsx';
 import {Provider} from 'react-redux';
-import thunkMiddleware from 'redux-thunk'
-import createLogger from 'redux-logger';
-import {createStore, applyMiddleware, combineReducers} from 'redux';
-import {syncHistory, routeReducer} from 'redux-simple-router';
-import {story} from './reducers.js'
-const history = createBrowserHistory();
-const reduxRouterMiddleware = syncHistory(history);
+require('bootstrap/dist/css/bootstrap.css');
 
-const loggerMiddleware = createLogger();
-const createStoreWithMiddleware = applyMiddleware(
-  thunkMiddleware,
-  loggerMiddleware,
-  reduxRouterMiddleware
-)(createStore);
-
-const reducer = combineReducers({
-  story: story,
-  routing: routeReducer
-})
+import {UserProfile} from './user.jsx';
+import {TopStory, Job, Ask, Show, News } from './containers/index.js';
+import StoryCommentsContainer from './containers/storyComment.js';
+import rootReducer from './reducers/index.js'
+import configureStore, {history, reduxRouterMiddleware} from './store/configureStore.js';
 
 
-const store = createStoreWithMiddleware(reducer, {story: {}})
+const store = configureStore();
 
 reduxRouterMiddleware.listenForReplays(store);
 
@@ -42,7 +26,6 @@ class Header extends React.Component {
   }
 
   handleSelect(selectedKey) {
-    console.log(selectedKey);
     this.setState({activeKey: selectedKey})
     location.href = selectedKey;
   }
@@ -52,10 +35,10 @@ class Header extends React.Component {
       <Navbar>
         <NavBrand><a href='/'>Hacker News</a></NavBrand>
         <Nav>
-          <NavItem eventKey={'#/news/newstory'} href='/news/newstories'>newstory</NavItem>
-          <NavItem eventKey={'#/news/show'} href='/news/show'>show</NavItem>
-          <NavItem eventKey={'#/news/ask'} href='/news/asks'>ask</NavItem>
-          <NavItem eventKey={'#/news/jobs'} href='/news/jobs'>jobs</NavItem>
+          <NavItem eventKey={'#/news/newstory'} href='/news'>newstory</NavItem>
+          <NavItem eventKey={'#/news/show'} href='/show'>show</NavItem>
+          <NavItem eventKey={'#/ask'} href='/ask'>ask</NavItem>
+          <NavItem eventKey={'#/jobs'} href='/jobs'>jobs</NavItem>
         </Nav>
       </Navbar>
     )
@@ -84,9 +67,12 @@ ReactDOM.render(
     <Router history={history}>
       <Route path='/' name='main' component={App}>
         <IndexRoute component={TopStory}/>
-        <Route path='/news/:category' name='news' component={StoryList}/>
+        <Route path='/jobs' name='jobs' component={Job}/>
+        <Route path='/show' name='show' component={Show}/>
+        <Route path='/ask' name='ask' component={Ask}/>
+        <Route path='/news' name='news' component={News}/>
         <Route path='/user/:id' name='user' component={UserProfile}/>
-        <Route path='/story/:id' name='storycomments' component={StoryComments}/>
+        <Route path='/story/:id' name='storycomments' component={StoryCommentsContainer}/>
         <Route path='/comment/:id' name='comment' component={Comment}/>
       </Route>
       <Route path='*' component={NoMatch}/>

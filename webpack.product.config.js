@@ -6,7 +6,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 config.plugins.push(new webpack.optimize.UglifyJsPlugin());
 
 config.plugins.push(new HtmlWebpackPlugin({
-  title: 'HACKER NEWS', filename: 'index_pro.html', hash: true, template: 'index.tpl.html',
+  title: 'HACKER NEWS', filename: 'index.html', hash: true, template: 'index.tpl.html',
   inject: 'body'}))
 
 config.entry = path.resolve(__dirname, 'app/main.js')

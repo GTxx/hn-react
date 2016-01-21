@@ -77,6 +77,7 @@ export function fetchCategoryStoryIdList(category){
     get_data(CATEGORY_URL[category], storyIdList => {
       dispatch(receiveStoryIdList(storyIdList, category));
       dispatch(switchPage(1));
+      dispatch(requestDone(category));
 
       let pagination = new Paginate(storyIdList, 1);
       dispatch(fetchStoryList(pagination.currentPageItems, category));
@@ -101,7 +102,6 @@ export function fetchStoryList(storyIdList) {
 export function switchPageFetchStoryList(storyIdList, pageNum){
   return dispatch => {
     dispatch(switchPage(pageNum));
-    dispatch(requestStart('STORY_LIST'));
     dispatch(fetchStoryList(storyIdList));
   }
 }

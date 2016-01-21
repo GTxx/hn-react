@@ -20,7 +20,7 @@ const createStoreWithMiddleware = applyMiddleware(
 
 export default function configureStore(initialState={
   story: {},
-  fetchState: {isFetching: true, lastFetchTime: '1999-01-01'},
+  fetchState: {isFetching: true, httpReqNum: 0, lastFetchTime: '1999-01-01'},
   categoryStory: {
     topnews: [],
     jobs: [],

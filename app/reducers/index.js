@@ -16,12 +16,20 @@ const CategoryUrl = {
   show: 'https://hacker-news.firebaseio.com/v0/showstories.json'
 };
 
-export function fetchState(state={isFetching: false, }, action){
+export function fetchState(state={isFetching: false, httpReqNum: 0}, action){
+  let {httpReqNum, } = state;
   switch (action.type){
     case REQUEST_HTTP_START:
-      return Object.assign({}, state, {isFetching: true});
+      httpReqNum = httpReqNum + 1;
+      return Object.assign({}, state, {
+        isFetching: true,
+        httpReqNum});
     case REQUEST_HTTP_SUCCESS:
-      return Object.assign({}, state, {isFetching: false, lastFetchTime: action.receiveAt});
+      httpReqNum = httpReqNum - 1;
+      return Object.assign({}, state, {
+        isFetching: false,
+        httpReqNum,
+        lastFetchTime: action.receiveAt});
     default:
       return state
   }

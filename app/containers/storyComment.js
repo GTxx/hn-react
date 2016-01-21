@@ -19,7 +19,7 @@ class StoryCommentsContainer extends React.Component {
   render() {
     let storyComment = this.props.storyComment[this.props.params.id] || {};
     return (
-      <Loader loaded={!this.props.isFetching}>
+      <Loader loaded={this.props.httpReqNum==0}>
         <StoryComments story={storyComment}/>
       </Loader>)
   }
@@ -27,12 +27,13 @@ class StoryCommentsContainer extends React.Component {
 
 StoryCommentsContainer.propTypes = {
   storyComment: PropTypes.object.isRequired,
-  isFetching: PropTypes.bool.isRequired
+  isFetching: PropTypes.bool.isRequired,
+  httpReqNum: PropTypes.number.isRequired
 };
 
 function mapStateToProps(state) {
   const {storyComment, fetchState} = state;
-  return {storyComment, isFetching: fetchState.isFetching};
+  return {storyComment, isFetching: fetchState.isFetching, httpReqNum: fetchState.httpReqNum};
 }
 
 StoryCommentsContainer = connect(mapStateToProps)(StoryCommentsContainer);

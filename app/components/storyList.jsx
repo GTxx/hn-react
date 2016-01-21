@@ -4,6 +4,7 @@ import {Pagination} from 'react-bootstrap';
 import Loader from 'react-loader';
 import {connect} from 'react-redux';
 import {switchPageFetchStoryList} from './../actions/actions.js';
+import {Paginate} from '../utils.js';
 
 
 class StoryList extends React.Component {

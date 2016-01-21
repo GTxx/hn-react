@@ -7,9 +7,9 @@ import {Paginate} from '../utils.js';
 
 class StoryListContainer extends React.Component {
   render() {
-    const {storyIdList, isFetching, storyList, currentPage} = this.props
+    const {storyIdList, httpReqNum, isFetching, storyList, currentPage} = this.props;
     return (
-      <Loader loaded={!isFetching}>
+      <Loader loaded={httpReqNum == 0}>
         <StoryList storyList={storyList} storyIdList={storyIdList} currentPage={currentPage}/>
       </Loader>)
   }
@@ -18,6 +18,7 @@ class StoryListContainer extends React.Component {
 StoryListContainer.propTypes = {
   storyIdList: PropTypes.array.isRequired,
   isFetching: PropTypes.bool.isRequired,
+  httpReqNum: PropTypes.number.isRequired,
   storyList: PropTypes.array.isRequired,
   currentPage: PropTypes.number.isRequired
 };
@@ -27,12 +28,11 @@ function mapStateToProps(category) {
     const {currentPage, story, fetchState, categoryStory} = state;
     let storyIdList = categoryStory[category];
     let pagination = new Paginate(storyIdList, currentPage);
-    let storyList = pagination.currentPageItems.map((storyId)=>{
-      return story[storyId];
-    });
+    let storyList = pagination.currentPageItems.map(storyId => story[storyId]).filter(story=>story)
     return {
       storyIdList,
       isFetching: fetchState.isFetching,
+      httpReqNum: fetchState.httpReqNum,
       currentPage: currentPage,
       storyList
     };

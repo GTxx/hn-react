@@ -18,7 +18,6 @@ class StoryCommentsContainer extends React.Component {
 
   render() {
     let storyComment = this.props.storyComment[this.props.params.id] || {};
-    debugger
     return (
       <Loader loaded={!this.props.isFetching}>
         <StoryComments story={storyComment}/>

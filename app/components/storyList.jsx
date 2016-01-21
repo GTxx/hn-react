@@ -2,10 +2,7 @@ import {ItemList} from './component.jsx';
 import React, {PropTypes} from 'react';
 import {Pagination} from 'react-bootstrap';
 import Loader from 'react-loader';
-import async from 'async';
 import {connect} from 'react-redux';
-import {get_data, Paginate} from './../utils.js';
-import store from './../main.js';
 import {switchPageFetchStoryList} from './../actions/actions.js';
 
 
@@ -18,7 +15,6 @@ class StoryList extends React.Component {
 
   handlePageSelect(event, selectedEvent) {
     let selectedPage = selectedEvent.eventKey;
-    debugger
     if (this.props.currentPage != selectedPage) {
       let pagination = new Paginate(this.props.storyIdList, selectedPage);
       this.props.dispatch(switchPageFetchStoryList(pagination.currentPageItems, selectedPage))
@@ -37,7 +33,7 @@ class StoryList extends React.Component {
           first={true}
           last={true}
           ellipsis={true}
-          items={storyIdList.length}
+          items={total_page}
           maxButtons={Math.min(10, total_page)}
           activePage={currentPage}
           onSelect={this.handlePageSelect}

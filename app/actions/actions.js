@@ -80,11 +80,24 @@ export function fetchCategoryStoryIdList(category){
       dispatch(requestDone(category));
 
       let pagination = new Paginate(storyIdList, 1);
-      dispatch(fetchStoryList(pagination.currentPageItems, category));
+      dispatch(fetchStoryListIfNeed(pagination.currentPageItems, category));
     })
   }
 }
 
+function shouldFetchStoryList(state, storyIdList){
+  let notFetchedStoryIdList = storyIdList.filter(storyId => !state.story[storyId]);
+  return notFetchedStoryIdList;
+}
+
+function fetchStoryListIfNeed(storyIdList){
+  return (dispatch, getState) => {
+    let notFetchedStoryIdList = shouldFetchStoryList(getState(), storyIdList);
+    if (notFetchedStoryIdList){
+      return dispatch(fetchStoryList(notFetchedStoryIdList));
+    }
+  }
+}
 export function fetchStoryList(storyIdList) {
   return dispatch => {
     dispatch(requestStart('STORY_LIST'));
@@ -102,7 +115,7 @@ export function fetchStoryList(storyIdList) {
 export function switchPageFetchStoryList(storyIdList, pageNum){
   return dispatch => {
     dispatch(switchPage(pageNum));
-    dispatch(fetchStoryList(storyIdList));
+    dispatch(fetchStoryListIfNeed(storyIdList));
   }
 }
 

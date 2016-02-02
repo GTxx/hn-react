@@ -36,4 +36,10 @@ class Paginate {
   }
 }
 
-export {get_data, Paginate}
+function get_hostname(url){
+  var _tmp = document.createElement('a');
+  _tmp.href = url;
+  return _tmp.hostname;
+}
+
+export {get_data, Paginate, get_hostname}

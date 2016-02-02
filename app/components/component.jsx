@@ -3,7 +3,7 @@ var ReactBootstrap = require('react-bootstrap');
 var moment = require('moment');
 import {Panel, Badge, Pagination} from 'react-bootstrap';
 import {Link} from 'react-router';
-import {get_data} from './../utils.js'
+import {get_data, get_hostname} from './../utils.js'
 import {Col} from 'react-bootstrap';
 
 
@@ -19,20 +19,12 @@ class ItemList extends React.Component {
   }
 }
 
-class Item extends React.Component {
-
-  render() {
-    var _tmp = document.createElement('a');
-    _tmp.href = this.props.data.url;
-    var domain = _tmp.hostname;
-    return (
-      <Panel
-        header={<h4><a href={this.props.data.url}>{this.props.data.title}</a> ({domain})</h4>}>
-        <Badge>{this.props.data.score}</Badge> points by <a href={`#/user/${this.props.data.by}`}> {this.props.data.by}</a> in {moment.unix(this.props.data.time).fromNow()} |
-        <Link to={`/story/${this.props.data.id}`}><Badge>{this.props.data.descendants}</Badge> comments</Link>
-      </Panel>
-    )
-  }
-}
+const Item = props => (
+  <Panel
+    header={<h4><a href={props.data.url}>{props.data.title}</a> ({get_hostname(props.data.url)})</h4>}>
+    <Badge>{props.data.score}</Badge> points by <a href={`#/user/${props.data.by}`}> {props.data.by}</a> in {moment.unix(props.data.time).fromNow()} |
+    <Link to={`/story/${props.data.id}`}><Badge>{props.data.descendants}</Badge> comments</Link>
+  </Panel>
+);
 
 export {ItemList, Item};

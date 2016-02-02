@@ -5,7 +5,6 @@ import {Panel, Badge, Col, Row} from 'react-bootstrap';
 class StoryComments extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {story: {}}
   }
 
   render() {

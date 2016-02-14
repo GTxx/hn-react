@@ -1,15 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Router, Route, Link, IndexRoute} from 'react-router';
-import createBrowserHistory from 'history/lib/createBrowserHistory'
 import {Nav, NavItem, Col, Navbar, NavBrand, Grid, Row} from 'react-bootstrap';
 import {Provider} from 'react-redux';
+import {browserHistory} from 'react-router';
 require('bootstrap/dist/css/bootstrap.css');
 
 import {UserProfile} from './user.jsx';
 import {TopStory, Job, Ask, Show, News } from './containers/index.js';
 import StoryCommentsContainer from './containers/storyComment.js';
-import rootReducer from './reducers/index.js'
 import configureStore, {history, reduxRouterMiddleware} from './store/configureStore.js';
 
 
@@ -64,7 +63,7 @@ class NoMatch extends React.Component {
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={history}>
+    <Router history={browserHistory}>
       <Route path='/' name='main' component={App}>
         <IndexRoute component={TopStory}/>
         <Route path='/jobs' name='jobs' component={Job}/>

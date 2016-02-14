@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import {routeReducer} from 'redux-simple-router';
+import {routeReducer} from 'react-router-redux';
 import {REQUEST_STORY, RECEIVE_STORY_LIST_AND_STORY,
   REQUEST_HTTP_START, REQUEST_HTTP_SUCCESS,
   FETCH_TOPNEWS, FETCH_JOBS, FETCH_SHOWS,
@@ -81,7 +81,7 @@ const rootReducer = combineReducers({
   fetchState: fetchState,
   categoryStory: categoryStory,
   currentPage: currentPage,
-  routing: routeReducer,
+  //routing: routeReducer,
   storyComment: storyComment
 });
 

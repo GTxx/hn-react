@@ -77,12 +77,12 @@ export function storyComment(state={}, action){
 }
 
 const rootReducer = combineReducers({
-  story: story,
-  fetchState: fetchState,
-  categoryStory: categoryStory,
-  currentPage: currentPage,
-  //routing: routeReducer,
-  storyComment: storyComment
+  story,
+  fetchState,
+  categoryStory,
+  currentPage,
+  storyComment,
+  routing: routeReducer,
 });
 
 export default rootReducer;

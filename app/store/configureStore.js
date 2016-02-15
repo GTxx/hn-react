@@ -2,15 +2,8 @@ import {createStore, applyMiddleware, combineReducers} from 'redux';
 import thunkMiddleware from 'redux-thunk'
 import createLogger from 'redux-logger';
 import {browserHistory} from 'react-router';
-import {syncHistory, routeReducer} from 'react-router-redux';
+import {syncHistory} from 'react-router-redux';
 import rootReducer from '../reducers/index.js';
-
-const reducer = combineReducers({
-  ...rootReducer,
-  routing: routeReducer
-});
-
-console.log(reducer)
 
 export const reduxRouterMiddleware = syncHistory(browserHistory);
 
@@ -35,9 +28,6 @@ export default function configureStore(initialState={
   currentPage: 1,
   storyComment: {}
 }){
-  //const store = createStoreWithMiddleware(rootReducer, initialState);
-  const store = createStoreWithMiddleware(reducer, initialState);
+  const store = createStoreWithMiddleware(rootReducer, initialState);
   return store;
 }
-
-

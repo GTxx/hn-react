@@ -93,7 +93,7 @@ function shouldFetchStoryList(state, storyIdList){
 function fetchStoryListIfNeed(storyIdList){
   return (dispatch, getState) => {
     let notFetchedStoryIdList = shouldFetchStoryList(getState(), storyIdList);
-    if (notFetchedStoryIdList){
+    if (notFetchedStoryIdList.length){
       return dispatch(fetchStoryList(notFetchedStoryIdList));
     }
   }

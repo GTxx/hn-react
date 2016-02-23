@@ -32,12 +32,12 @@ class Header extends React.Component {
   render() {
     return (
       <Navbar>
-        <NavBrand><a href='/'>Hacker News</a></NavBrand>
-        <Nav>
-          <NavItem eventKey={'#/news/newstory'} href='/news'>newstory</NavItem>
-          <NavItem eventKey={'#/news/show'} href='/show'>show</NavItem>
-          <NavItem eventKey={'#/ask'} href='/ask'>ask</NavItem>
-          <NavItem eventKey={'#/jobs'} href='/jobs'>jobs</NavItem>
+        <NavBrand><Link to='/'>Hacker News</Link></NavBrand>
+        <Nav onSelect={(key)=> browserHistory.push(key)}>
+          <NavItem eventKey={'/news'} >newstory</NavItem>
+          <NavItem eventKey={'/show'} >show</NavItem>
+          <NavItem eventKey={'/ask'} >ask</NavItem>
+          <NavItem eventKey={'/jobs'} >jobs</NavItem>
         </Nav>
       </Navbar>
     )

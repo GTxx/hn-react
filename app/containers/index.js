@@ -1,27 +1,50 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import Loader from 'react-loader';
-import {StoryList} from '../components/storyList.jsx';
+import {Pagination} from 'react-bootstrap';
+
+import {ItemList} from '../components/component.jsx';
 import {fetchCategoryStoryIdList, switchPageFetchStoryList} from '../actions/actions.js';
 import {Paginate} from '../utils.js';
 
 class StoryListContainer extends React.Component {
+
+  static propTypes =  {
+    storyIdList: PropTypes.array.isRequired,
+    isFetching: PropTypes.bool.isRequired,
+    httpReqNum: PropTypes.number.isRequired,
+    storyList: PropTypes.array.isRequired,
+    currentPage: PropTypes.number.isRequired
+  };
+
+  handlePageSelect(event, selectedEvent) {
+    let selectedPage = selectedEvent.eventKey;
+    if (this.props.currentPage != selectedPage) {
+      let pagination = new Paginate(this.props.storyIdList, selectedPage);
+      this.props.dispatch(switchPageFetchStoryList(pagination.currentPageItems, selectedPage))
+    }
+  }
   render() {
     const {storyIdList, httpReqNum, isFetching, storyList, currentPage} = this.props;
+    let total_page = Math.ceil(storyIdList.length / 10);
     return (
       <Loader loaded={httpReqNum == 0}>
-        <StoryList storyList={storyList} storyIdList={storyIdList} currentPage={currentPage}/>
+        <ItemList data={storyList} />
+        <Pagination
+          prev={true}
+          next={true}
+          first={true}
+          last={true}
+          ellipsis={true}
+          items={total_page}
+          maxButtons={Math.min(10, total_page)}
+          activePage={currentPage}
+          onSelect={this.handlePageSelect.bind(this)}
+          />
       </Loader>)
   }
 }
 
-StoryListContainer.propTypes = {
-  storyIdList: PropTypes.array.isRequired,
-  isFetching: PropTypes.bool.isRequired,
-  httpReqNum: PropTypes.number.isRequired,
-  storyList: PropTypes.array.isRequired,
-  currentPage: PropTypes.number.isRequired
-};
 
 function mapStateToProps(category) {
   return (state) => {

@@ -9,7 +9,7 @@ require('bootstrap/dist/css/bootstrap.css');
 import {UserProfile} from './user.jsx';
 import {TopStory, Job, Ask, Show, News } from './containers/index.js';
 import StoryCommentsContainer from './containers/storyComment.js';
-import configureStore, {history, reduxRouterMiddleware} from './store/configureStore.js';
+import configureStore, {reduxRouterMiddleware} from './store/configureStore.js';
 
 
 const store = configureStore();

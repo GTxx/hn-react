@@ -7,9 +7,6 @@ import {fetchStoryComments} from '../actions/actions.js'
 
 
 class StoryCommentsContainer extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   componentDidMount() {
     let id = this.props.params.id;

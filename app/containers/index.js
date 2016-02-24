@@ -4,7 +4,8 @@ import Loader from 'react-loader';
 import {Pagination} from 'react-bootstrap';
 
 import {ItemList} from '../components/component.jsx';
-import {fetchCategoryStoryIdList, switchPageFetchStoryList} from '../actions/actions.js';
+import {fetchCategoryStoryIdList, switchPageFetchStoryList, fetchStoryListIfNeed}
+  from '../actions/actions.js';
 import {Paginate} from '../utils.js';
 
 class StoryListContainer extends React.Component {
@@ -45,7 +46,6 @@ class StoryListContainer extends React.Component {
   }
 }
 
-
 function mapStateToProps(category) {
   return (state) => {
     const {currentPage, story, fetchState, categoryStory} = state;
@@ -56,52 +56,38 @@ function mapStateToProps(category) {
       storyIdList,
       isFetching: fetchState.isFetching,
       httpReqNum: fetchState.httpReqNum,
-      currentPage: currentPage,
+      currentPage,
       storyList
     };
   }
 }
 
-class Job extends StoryListContainer {
+let HighOrderStoryList = category => class extends React.Component {
   componentDidMount() {
-    this.props.dispatch(fetchCategoryStoryIdList('jobs'));
+    this.props.dispatch(fetchCategoryStoryIdList(category));
+  }
+
+  render(){
+    const TopStoryStoryContainer = connect(mapStateToProps(category))(StoryListContainer)
+    return (<TopStoryStoryContainer />)
   }
 }
 
-Job = connect(mapStateToProps('jobs'))(Job)
+let TopStory = HighOrderStoryList('topnews')
+TopStory = connect()(TopStory)
 
-class TopStory extends StoryListContainer {
-  componentDidMount() {
-    this.props.dispatch(fetchCategoryStoryIdList('topnews'));
-  }
-}
+let News = HighOrderStoryList('newstories')
+News = connect()(News)
 
-TopStory = connect(mapStateToProps('topnews'))(TopStory);
+let Ask = HighOrderStoryList('asks')
+Ask = connect()(Ask)
+
+let Show = HighOrderStoryList('show')
+Show = connect()(Show)
 
 
-class News extends StoryListContainer {
-  componentDidMount() {
-    this.props.dispatch(fetchCategoryStoryIdList('newstories'));
-  }
-}
-
-News = connect(mapStateToProps('newstories'))(News);
-
-class Ask extends StoryListContainer {
-  componentDidMount() {
-    this.props.dispatch(fetchCategoryStoryIdList('asks'));
-  }
-}
-
-Ask = connect(mapStateToProps('asks'))(Ask);
-
-class Show extends StoryListContainer {
-  componentDidMount() {
-    this.props.dispatch(fetchCategoryStoryIdList('show'));
-  }
-}
-
-Show = connect(mapStateToProps('show'))(Show);
+let Job = HighOrderStoryList('jobs')
+Job = connect()(Job)
 
 export {TopStory, Job, Ask, Show, News};
 

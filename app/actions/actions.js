@@ -90,7 +90,7 @@ function shouldFetchStoryList(state, storyIdList){
   return notFetchedStoryIdList;
 }
 
-function fetchStoryListIfNeed(storyIdList){
+export function fetchStoryListIfNeed(storyIdList){
   return (dispatch, getState) => {
     let notFetchedStoryIdList = shouldFetchStoryList(getState(), storyIdList);
     if (notFetchedStoryIdList.length){

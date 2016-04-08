@@ -4,18 +4,18 @@ import {Router, Route, Link, IndexRoute} from 'react-router';
 import {Nav, NavItem, Col, Navbar, NavBrand, Grid, Row} from 'react-bootstrap';
 import {Provider} from 'react-redux';
 import {browserHistory} from 'react-router';
+import {syncHistoryWithStore} from 'react-router-redux';
 require('bootstrap/dist/css/bootstrap.css');
 
 import {UserProfile} from './user.jsx';
 import {TopStory, Job, Ask, Show, News } from './containers/index.js';
 import StoryCommentsContainer from './containers/storyComment.js';
-import configureStore, {reduxRouterMiddleware} from './store/configureStore.js';
+import configureStore from './store/configureStore.js';
 
 
 const store = configureStore();
 
-reduxRouterMiddleware.listenForReplays(store);
-
+const history = syncHistoryWithStore(browserHistory, store);
 
 class Header extends React.Component {
   constructor(props) {
@@ -63,7 +63,7 @@ class NoMatch extends React.Component {
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={browserHistory}>
+    <Router history={history}>
       <Route path='/' name='main' component={App}>
         <IndexRoute component={TopStory}/>
         <Route path='/jobs' name='jobs' component={Job}/>

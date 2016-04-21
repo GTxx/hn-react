@@ -2,7 +2,7 @@ import React from 'react';
 var moment = require('moment');
 import {Panel, Badge} from 'react-bootstrap';
 import {Link} from 'react-router';
-import {get_data, get_hostname} from './../utils.js'
+import {get_hostname} from './../utils.js'
 
 
 const ItemList = ({data}) => {

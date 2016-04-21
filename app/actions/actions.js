@@ -1,4 +1,3 @@
-import async from 'async';
 import {get_data, Paginate} from './../utils.js';
 
 
@@ -101,14 +100,15 @@ export function fetchStoryListIfNeed(storyIdList){
 export function fetchStoryList(storyIdList) {
   return dispatch => {
     dispatch(requestStart('STORY_LIST'));
-    async.map(storyIdList, (storyId, cb)=> {
-      get_data(`https://hacker-news.firebaseio.com/v0/item/${storyId}.json`, function (res) {
-        return cb(null, res);
+
+    let promises = storyIdList.map(
+      storyId => fetch(`https://hacker-news.firebaseio.com/v0/item/${storyId}.json`).then(response=>response.json())
+      )
+    Promise.all(promises)
+      .then(all_json => {
+        dispatch(receiveStoryList(all_json));
+        dispatch(requestDone(storyIdList));
       })
-    }, (err, result)=> {
-      dispatch(receiveStoryList(result))
-      dispatch(requestDone(storyIdList))
-    })
   }
 }
 

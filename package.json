@@ -4,10 +4,8 @@
   "description": "``` bower install ```",
   "main": "index.js",
   "dependencies": {
-    "async": "^1.5.2",
     "bootstrap": "^3.3.5",
     "moment": "^2.10.3",
-    "node-libs-browser": "^0.5.2",
     "react": "^0.14.0",
     "react-bootstrap": "^0.27.3",
     "react-dom": "^0.14.0",

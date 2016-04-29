@@ -6,8 +6,8 @@ import { Provider } from 'react-redux';
 import { syncHistoryWithStore } from 'react-router-redux';
 require('bootstrap/dist/css/bootstrap.css');
 
-import { UserProfile } from './user.jsx';
 import { TopStory, Job, Ask, Show, News } from './containers/index.js';
+import { UserProfileContainer } from './containers/user';
 import StoryCommentsContainer from './containers/storyComment.js';
 import configureStore from './store/configureStore.js';
 
@@ -69,7 +69,7 @@ ReactDOM.render(
         <Route path="/show" name="show" component={Show} />
         <Route path="/ask" name="ask" component={Ask} />
         <Route path="/news" name="news" component={News} />
-        <Route path="/user/:id" name="user" component={UserProfile} />
+        <Route path="/user/:username" name="user" component={UserProfileContainer} />
         <Route path="/story/:id" name="storycomments" component={StoryCommentsContainer} />
         <Route path="/comment/:id" name="comment" component={Comment} />
       </Route>

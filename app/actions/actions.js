@@ -15,6 +15,8 @@ export const FETCH_TOPNEWS = 'FETCH_TOPNEWS';
 export const FETCH_JOBS = 'FETCH_JOBS';
 export const FETCH_SHOWS = 'FETCH_SHOWS';
 
+export const RECEIVE_USER = 'RECEIVE_USER';
+
 export const SWITCH_PAGE = 'SWITCH_PAGE';
 
 
@@ -136,4 +138,22 @@ export function fetchStoryComments(id) {
       return response;
     });
   };
+}
+
+function receiveUser(data) {
+  return {
+    type: RECEIVE_USER,
+    data
+  }
+}
+
+export function fetchUserProfile(username) {
+  return dispatch => {
+    return HackerNews.user(username).then(response => {
+      if (response.ok) {
+        response.json().then(data => dispatch(receiveUser(data)));
+      }
+      return response;
+    })
+  }
 }

@@ -24,7 +24,7 @@ const StoryComments = ({ story }) => {
     <Row>
       <Col xs={12}>
         <Panel header={<h4><a href={story.url}>{story.title}</a> </h4>}>
-          <Badge>{story.points}</Badge> points by <a href={`#/user/${story.author}`}> {story.author}</a>
+          <Badge>{story.points}</Badge> points by <a href={`/user/${story.author}`}> {story.author}</a>
           in {moment(story.created_at).fromNow() } |
           <Badge>{commentTotal}</Badge> comments
         </Panel>
@@ -39,14 +39,10 @@ StoryComments.propTypes = {
 };
 
 const Comment = ({ comment }) => {
-  let userUrl = `#/user/${comment.author}`;
-  // if (!comment.children){
-  //   debugger
-  // }
   let children = comment.children.map((child, index) => (<Comment comment={child} key={index} />));
   return (
     <Panel
-      header={<h4><a href={userUrl}>{comment.author}</a>{moment(comment.created_at).fromNow() }</h4>}
+      header={<h4><a href={`/user/${comment.author}`}>{comment.author}</a>{moment(comment.created_at).fromNow() }</h4>}
       >
       <div dangerouslySetInnerHTML={{ __html: comment.text }} />
       {children}

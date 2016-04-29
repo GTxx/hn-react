@@ -18,10 +18,9 @@ class StoryCommentsContainer extends React.Component {
   }
 
   render() {
-    let storyComment = this.props.storyComment[this.props.params.id] || {};
     return (
       <Loader loaded={this.state.loaded}>
-        <StoryComments story={storyComment} />
+        <StoryComments story={this.props.storyComment} />
       </Loader>);
   }
 }
@@ -30,9 +29,8 @@ StoryCommentsContainer.propTypes = {
   storyComment: PropTypes.object.isRequired,
 };
 
-function mapStateToProps(state) {
-  const { storyComment } = state;
-  return { storyComment };
+function mapStateToProps(state, props) {
+  return { storyComment: state.storyComment[props.params.id] || {} };
 }
 
 StoryCommentsContainer = connect(mapStateToProps)(StoryCommentsContainer);

@@ -14,7 +14,8 @@ const HackerNews = {
   newstories: fetch(CategoryUrl.newstories),
   show: fetch(CategoryUrl.show),
   story: storyId => fetch(`https://hacker-news.firebaseio.com/v0/item/${storyId}.json`),
-  storyComment: storyId => fetch(`http://hn.algolia.com/api/v1/items/${storyId}`)
+  storyComment: storyId => fetch(`http://hn.algolia.com/api/v1/items/${storyId}`),
+  user: username => fetch(`https://hacker-news.firebaseio.com/v0/user/${username}.json`)
 };
 
 export { HackerNews };

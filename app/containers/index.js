@@ -5,18 +5,12 @@ import {Pagination} from 'react-bootstrap';
 
 import {ItemList} from '../components/component.jsx';
 import {fetchCategoryStoryIdList, switchPageFetchStoryList, fetchStoryListIfNeed}
-  from '../actions/actions.js';
+from '../actions/actions.js';
 import {Paginate} from '../utils.js';
 
 class StoryListContainer extends React.Component {
 
-  static propTypes =  {
-    storyIdList: PropTypes.array.isRequired,
-    isFetching: PropTypes.bool.isRequired,
-    httpReqNum: PropTypes.number.isRequired,
-    storyList: PropTypes.array.isRequired,
-    currentPage: PropTypes.number.isRequired
-  };
+
 
   handlePageSelect(event, selectedEvent) {
     let selectedPage = selectedEvent.eventKey;
@@ -38,20 +32,29 @@ class StoryListContainer extends React.Component {
           last={true}
           ellipsis={true}
           items={total_page}
-          maxButtons={Math.min(10, total_page)}
+          maxButtons={Math.min(10, total_page) }
           activePage={currentPage}
-          onSelect={this.handlePageSelect.bind(this)}
+          onSelect={this.handlePageSelect.bind(this) }
           />
       </Loader>)
   }
 }
+
+
+StoryListContainer.propTypes = {
+  storyIdList: PropTypes.array.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  httpReqNum: PropTypes.number.isRequired,
+  storyList: PropTypes.array.isRequired,
+  currentPage: PropTypes.number.isRequired,
+};
 
 function mapStateToProps(category) {
   return (state) => {
     const {currentPage, story, fetchState, categoryStory} = state;
     let storyIdList = categoryStory[category];
     let pagination = new Paginate(storyIdList, currentPage);
-    let storyList = pagination.currentPageItems.map(storyId => story[storyId]).filter(story=>story)
+    let storyList = pagination.currentPageItems.map(storyId => story[storyId]).filter(story => story)
     return {
       storyIdList,
       isFetching: fetchState.isFetching,
@@ -62,14 +65,16 @@ function mapStateToProps(category) {
   }
 }
 
-let HighOrderStoryList = category => class extends React.Component {
-  componentDidMount() {
-    this.props.dispatch(fetchCategoryStoryIdList(category));
-  }
+function HighOrderStoryList(category) {
+  return class extends React.Component {
+    componentDidMount() {
+      this.props.dispatch(fetchCategoryStoryIdList(category));
+    }
 
-  render(){
-    const TopStoryStoryContainer = connect(mapStateToProps(category))(StoryListContainer)
-    return (<TopStoryStoryContainer />)
+    render() {
+      const TopStoryStoryContainer = connect(mapStateToProps(category))(StoryListContainer)
+      return (<TopStoryStoryContainer />)
+    }
   }
 }
 

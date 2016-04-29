@@ -1,5 +1,5 @@
-import {get_data, Paginate} from './../utils.js';
-
+import { get_data, Paginate } from './../utils.js';
+import { HackerNews } from '../agent.js';
 
 export const SELECT_CATEGORY = 'SELECT_CATEGORY';
 export const REQUEST_STORY = 'REQUEST_STORY';
@@ -19,7 +19,7 @@ export const SWITCH_PAGE = 'SWITCH_PAGE';
 
 
 function requestStory(requestType) {
-  return {type: 'isFetching', requestType}
+  return { type: 'isFetching', requestType };
 }
 
 function receiveStoryList(storyList, category) {
@@ -27,36 +27,36 @@ function receiveStoryList(storyList, category) {
     type: RECEIVE_STORY_LIST,
     storyList,
     receiveAt: Date.now()
-  }
+  };
 }
 
-export function receiveStoryIdList(storyIdList, category){
+export function receiveStoryIdList(storyIdList, category) {
   return {
     type: RECEIVE_STORY_ID_LIST,
     storyIdList: storyIdList,
     category: category
-  }
+  };
 }
 
 function requestStart(content) {
   return {
     type: REQUEST_HTTP_START,
     content
-  }
+  };
 }
 
-function requestDone(content){
+function requestDone(content) {
   return {
     type: REQUEST_HTTP_SUCCESS,
     content
-  }
+  };
 }
 
-function switchPage(pageNum){
+function switchPage(pageNum) {
   return {
     type: SWITCH_PAGE,
     pageNum
-  }
+  };
 }
 
 const CATEGORY_URL = {
@@ -68,7 +68,7 @@ const CATEGORY_URL = {
 };
 
 
-export function fetchCategoryStoryIdList(category){
+export function fetchCategoryStoryIdList(category) {
   // 获取类别下的story id，并获取第一页的数据
   return dispatch => {
     dispatch(requestStart(category));
@@ -80,60 +80,60 @@ export function fetchCategoryStoryIdList(category){
 
       let pagination = new Paginate(storyIdList, 1);
       dispatch(fetchStoryListIfNeed(pagination.currentPageItems, category));
-    })
-  }
+    });
+  };
 }
 
-function shouldFetchStoryList(state, storyIdList){
+function shouldFetchStoryList(state, storyIdList) {
   let notFetchedStoryIdList = storyIdList.filter(storyId => !state.story[storyId]);
   return notFetchedStoryIdList;
 }
 
-export function fetchStoryListIfNeed(storyIdList){
+export function fetchStoryListIfNeed(storyIdList) {
   return (dispatch, getState) => {
     let notFetchedStoryIdList = shouldFetchStoryList(getState(), storyIdList);
-    if (notFetchedStoryIdList.length){
+    if (notFetchedStoryIdList.length) {
       return dispatch(fetchStoryList(notFetchedStoryIdList));
     }
-  }
+  };
 }
 export function fetchStoryList(storyIdList) {
   return dispatch => {
     dispatch(requestStart('STORY_LIST'));
 
     let promises = storyIdList.map(
-      storyId => fetch(`https://hacker-news.firebaseio.com/v0/item/${storyId}.json`).then(response=>response.json())
-      )
+      storyId => fetch(`https://hacker-news.firebaseio.com/v0/item/${storyId}.json`).then(response => response.json())
+      );
     Promise.all(promises)
       .then(all_json => {
         dispatch(receiveStoryList(all_json));
         dispatch(requestDone(storyIdList));
-      })
-  }
+      });
+  };
 }
 
-export function switchPageFetchStoryList(storyIdList, pageNum){
+export function switchPageFetchStoryList(storyIdList, pageNum) {
   return dispatch => {
     dispatch(switchPage(pageNum));
     dispatch(fetchStoryListIfNeed(storyIdList));
-  }
+  };
 }
 
-function receiveStoryComments(data){
+function receiveStoryComments(data) {
   return {
     type: RECEIVE_STORY_COMMENTS,
     data
-  }
+  };
 }
 
 export function fetchStoryComments(id) {
   return dispatch => {
-    dispatch(requestStart(`storyComment ${id}`))
-    fetch(`http://hn.algolia.com/api/v1/items/${id}`)
-      .then((response)=>response.json())
-      .then((data)=> {
-        dispatch(receiveStoryComments(data))
-        dispatch(requestDone(data))
-      })
-  }
+    return HackerNews.storyComment(id).then(response => {
+      if (response.ok) {
+        response.json().then(
+          data => dispatch(receiveStoryComments(data)));
+      }
+      return response;
+    });
+  };
 }

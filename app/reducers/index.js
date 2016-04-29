@@ -7,15 +7,6 @@ import {REQUEST_STORY, RECEIVE_STORY_LIST_AND_STORY,
   RECEIVE_STORY_COMMENTS,
   SWITCH_PAGE} from './../actions/actions.js';
 
-
-const CategoryUrl = {
-  topnews: 'https://hacker-news.firebaseio.com/v0/topstories.json',
-  jobs: 'https://hacker-news.firebaseio.com/v0/jobstories.json',
-  asks: 'https://hacker-news.firebaseio.com/v0/askstories.json',
-  newstories: 'https://hacker-news.firebaseio.com/v0/newstories.json',
-  show: 'https://hacker-news.firebaseio.com/v0/showstories.json'
-};
-
 export function fetchState(state={isFetching: false, httpReqNum: 0}, action){
   let {httpReqNum, } = state;
   switch (action.type){
